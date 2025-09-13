@@ -1,5 +1,8 @@
+
 import { useState } from 'react'
 import './App.css'
+
+const APP_TITLE = 'Synthra';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState('home') // 'home', 'main', 'parameters', 'profile'
@@ -28,7 +31,7 @@ function App() {
     return (
       <div className="app">
         <header className="header">
-          <div className="title">Synthra</div>
+          <div className="title">{APP_TITLE}</div>
           <div className="header-right">
             <button className="home-button" onClick={handleHomeClick}>Home</button>
           </div>
@@ -61,7 +64,7 @@ function App() {
     return (
       <div className="app parameters-app">
         <header className="header">
-          <div className="title">Synthra</div>
+          <div className="title">{APP_TITLE}</div>
           <div className="header-right">
             <button className="home-button" onClick={handleHomeClick}>Home</button>
           </div>
@@ -113,7 +116,7 @@ function App() {
     return (
       <div className="app">
         <header className="header">
-          <div className="title">Synthra</div>
+          <div className="title">{APP_TITLE}</div>
           <div className="header-right">
             <button className="home-button" onClick={handleHomeClick}>Home</button>
           </div>
@@ -133,7 +136,7 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <div className="title">Synthra</div>
+  <div className="title">{APP_TITLE}</div>
         <div className="header-right">
           <button className="login-text" onClick={handleLogin}>Login</button>
           <button className="login-button" onClick={handleProfileClick}></button>
