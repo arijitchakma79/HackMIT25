@@ -34,6 +34,9 @@
 .login-text {
   font-size: 18px;
   color: #333;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .login-button {
@@ -61,4 +64,69 @@
   color: #333;
   font-weight: normal;
   text-align: center;
+}
+
+/* Login Screen Styles */
+.logout-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ff4444;
+  border: none;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #ff3333;
+}
+
+.login-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 80px);
+  padding: 40px;
+}
+
+.message-title {
+  font-size: 24px;
+  color: #333;
+  font-weight: normal;
+  margin-bottom: 40px;
+}
+
+.voice-input-area {
+  width: 500px;
+  height: 150px;
+  background-color: #e57373;
+  border-radius: 8px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.input-voice-btn {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.input-voice-btn:hover {
+  background-color: #555;
+}
+
+.voice-control-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: white;
+  border: none;
+  cursor: pointer;
 }
