@@ -7,8 +7,11 @@
 .app {
   width: 100vw;
   height: 100vh;
-  background-color: #d3d3d3;
-  /*font-family: Arial, sans-serif;*/
+  background-image: url('/splash.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: Arial, sans-serif;
 }
 
 .header {
@@ -16,7 +19,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 40px;
-  background-color: #d3d3d3;
+  background-color: transparent;
 }
 
 .title {
@@ -133,6 +136,11 @@
 }
 
 /* Parameters Screen Styles */
+.parameters-app {
+  background-image: none;
+  background-color: #d3d3d3;
+}
+
 .parameters-screen {
   display: flex;
   height: calc(100vh - 80px);

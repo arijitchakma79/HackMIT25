@@ -18,7 +18,7 @@ function App() {
 
   if (currentScreen === 'parameters') {
     return (
-      <div className="app">
+      <div className="app parameters-app">
         <header className="header">
           <div className="title">title</div>
           <div className="header-right">
