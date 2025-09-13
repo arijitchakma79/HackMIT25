@@ -6,6 +6,14 @@ const APP_TITLE = 'Synthra';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState('home') // 'home', 'main', 'parameters', 'profile'
+  // Sliders state for parameters screen
+  const [sliderValues, setSliderValues] = useState([95, 95, 95, 95]);
+
+  const handleSliderChange = (index, value) => {
+    const newValues = [...sliderValues];
+    newValues[index] = value;
+    setSliderValues(newValues);
+  }  
 
   const handleLogin = () => {
     setCurrentScreen('main')
@@ -69,7 +77,6 @@ function App() {
             <button className="home-button" onClick={handleHomeClick}>Home</button>
           </div>
         </header>
-        
         <main className="parameters-screen">
           <div className="left-panel">
             <img src="/splash.png" alt="Splash" className="splash-image" />
@@ -77,34 +84,22 @@ function App() {
           <div className="right-panel">
             <h2 className="parameters-title">Parameters</h2>
             <div className="parameters-list">
-              <div className="parameter-item">
-                <span className="param-label">Param</span>
-                <div className="slider-container">
-                  <input type="range" className="param-slider" min="0" max="100" value="95" readOnly />
-                  <span className="param-value">95%</span>
+              {[0, 1, 2, 3].map((idx) => (
+                <div className="parameter-item" key={idx}>
+                  <span className="param-label">Param</span>
+                  <div className="slider-container">
+                    <input
+                      type="range"
+                      className="param-slider"
+                      min="0"
+                      max="100"
+                      value={sliderValues[idx]}
+                      onChange={e => handleSliderChange(idx, Number(e.target.value))}
+                    />
+                    <span className="param-value">{sliderValues[idx]}%</span>
+                  </div>
                 </div>
-              </div>
-              <div className="parameter-item">
-                <span className="param-label">Param</span>
-                <div className="slider-container">
-                  <input type="range" className="param-slider" min="0" max="100" value="95" readOnly />
-                  <span className="param-value">95%</span>
-                </div>
-              </div>
-              <div className="parameter-item">
-                <span className="param-label">Param</span>
-                <div className="slider-container">
-                  <input type="range" className="param-slider" min="0" max="100" value="95" readOnly />
-                  <span className="param-value">95%</span>
-                </div>
-              </div>
-              <div className="parameter-item">
-                <span className="param-label">Param</span>
-                <div className="slider-container">
-                  <input type="range" className="param-slider" min="0" max="100" value="95" readOnly />
-                  <span className="param-value">95%</span>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </main>
