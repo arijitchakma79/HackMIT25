@@ -1,20 +1,30 @@
 from flask import Blueprint, request, jsonify
+from services.suno_services import (
+    generate_song,
+    get_clips,
+    poll_until_complete
+)
 
-api_bp = Blueprint("api", __name__)
-
-@api_bp.route("/generate-music", methods=["POST"])
-def generate_music():
+suna = Blueprint("suna", __name__)
+@suna.route("/generate", methods=["POST"])
+def generate():
     data = request.get_json()
-    prompt = data.get("prompt", "")
-    tags = data.get("tags")
-    make_instrumental = data.get("makeInstrumental", False)
+    try:
+        res = generate_song(
+            topic=data.get("topic"),
+            tags=data.get("tags"),
+            prompt=data.get("prompt"),
+            make_instrumental=data.get("make_instrumental", False),
+            cover_clip_id=data.get("cover_clip_id")
+        )
+        clip_id = res["id"]
+        clip = poll_until_complete(clip_id)
+        return jsonify({
+            "clip_id": clip_id,
+            "status": clip["status"],
+            "audio_url": clip.get("audio_url")
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-    result = SunoService.generate_song(prompt, tags, make_instrumental)
-    return jsonify(result)
 
-@api_bp.route("/check-status", methods=["POST"])
-def check_status():
-    data = request.get_json()
-    clip_ids = data.get("clipIds", [])
-    result = SunoService.check_status(clip_ids)
-    return jsonify(result)
