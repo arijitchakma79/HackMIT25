@@ -6,7 +6,7 @@ function App() {
       <header className="header">
         <div className="title">title</div>
         <div className="header-right">
-          <span className="login-text">Login</span>
+          <button className="login-text">Login</button>
           <button className="login-button"></button>
         </div>
       </header>
