@@ -8,7 +8,7 @@
   width: 100vw;
   height: 100vh;
   background-color: #d3d3d3;
-  font-family: Arial, sans-serif;
+  /*font-family: Arial, sans-serif;*/
 }
 
 .header {
@@ -130,3 +130,11 @@
   border: none;
   cursor: pointer;
 }
+
+.slogan {
+  font-family: "Host Grotesk", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: italic;
+}
+

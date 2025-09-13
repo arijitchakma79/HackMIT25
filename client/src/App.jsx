@@ -36,7 +36,7 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <div className="title">title</div>
+        <div className="title">Synthra</div>
         <div className="header-right">
           <button className="login-text" onClick={handleLogin}>Login</button>
           <button className="login-button"></button>
@@ -44,7 +44,7 @@ function App() {
       </header>
       
       <main className="main-content">
-        <h1 className="slogan">Some Slogan</h1>
+        <h1 className="slogan">synthesize your musical + artistic visions</h1>
       </main>
     </div>
   )
