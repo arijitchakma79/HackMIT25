@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-BASE_URL = "https://studio-api.prod.suno.com/api/v2/external/hackmit"
+BASE_URL = os.getenv("SUNO_BASE_URL")
 API_KEY = os.getenv("SUNO_API_KEY")
 
 HEADERS = {
