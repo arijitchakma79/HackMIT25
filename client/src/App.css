@@ -69,6 +69,88 @@
   text-align: center;
 }
 
+.home-button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #333;
+  cursor: pointer;
+  padding: 8px 16px;
+}
+
+.home-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+/* Profile Page Styles */
+.profile-content {
+  padding: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.profile-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+.profile-picture {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background-color: #ff4444;
+  flex-shrink: 0;
+}
+
+.profile-info {
+  flex: 1;
+  padding-top: 20px;
+}
+
+.profile-name {
+  font-size: 32px;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.profile-bio {
+  font-size: 20px;
+  color: #333;
+  margin: 0;
+}
+
+.saved-songs-section {
+  width: 100%;
+}
+
+.saved-songs-title {
+  font-size: 24px;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.songs-list {
+  border: 2px solid #333;
+  border-radius: 4px;
+}
+
+.song-item {
+  padding: 15px 20px;
+  font-size: 18px;
+  color: #333;
+  border-bottom: 1px solid #333;
+  background-color: transparent;
+}
+
+.song-item:last-child {
+  border-bottom: none;
+}
+
 /* Login Screen Styles */
 .logout-button {
   width: 40px;

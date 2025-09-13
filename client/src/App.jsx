@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css'
 
 function App() {
-  const [currentScreen, setCurrentScreen] = useState('home') // 'home', 'main', 'parameters'
+  const [currentScreen, setCurrentScreen] = useState('home') // 'home', 'main', 'parameters', 'profile'
 
   const handleLogin = () => {
     setCurrentScreen('main')
@@ -16,13 +16,54 @@ function App() {
     setCurrentScreen('parameters')
   }
 
+  const handleProfileClick = () => {
+    setCurrentScreen('profile')
+  }
+
+  const handleHomeClick = () => {
+    setCurrentScreen('home')
+  }
+
+  if (currentScreen === 'profile') {
+    return (
+      <div className="app">
+        <header className="header">
+          <div className="title">Synthra</div>
+          <div className="header-right">
+            <button className="home-button" onClick={handleHomeClick}>Home</button>
+          </div>
+        </header>
+        
+        <main className="profile-content">
+          <div className="profile-header">
+            <div className="profile-picture"></div>
+            <div className="profile-info">
+              <h2 className="profile-name">Profile Name</h2>
+              <p className="profile-bio">Bio words:</p>
+            </div>
+          </div>
+          
+          <div className="saved-songs-section">
+            <h3 className="saved-songs-title">Saved Songs:</h3>
+            <div className="songs-list">
+              <div className="song-item">Song1 - Vibe description</div>
+              <div className="song-item">Song2 - Vibe description</div>
+              <div className="song-item">Song3 - Vibe description</div>
+              <div className="song-item">Song4 - Vibe description</div>
+            </div>
+          </div>
+        </main>
+      </div>
+    )
+  }
+
   if (currentScreen === 'parameters') {
     return (
       <div className="app parameters-app">
         <header className="header">
-          <div className="title">title</div>
+          <div className="title">Synthra</div>
           <div className="header-right">
-            <button className="logout-button" onClick={handleLogout}></button>
+            <button className="home-button" onClick={handleHomeClick}>Home</button>
           </div>
         </header>
         
@@ -72,9 +113,9 @@ function App() {
     return (
       <div className="app">
         <header className="header">
-          <div className="title">title</div>
+          <div className="title">Synthra</div>
           <div className="header-right">
-            <button className="logout-button" onClick={handleLogout}></button>
+            <button className="home-button" onClick={handleHomeClick}>Home</button>
           </div>
         </header>
         
@@ -95,7 +136,7 @@ function App() {
         <div className="title">Synthra</div>
         <div className="header-right">
           <button className="login-text" onClick={handleLogin}>Login</button>
-          <button className="login-button"></button>
+          <button className="login-button" onClick={handleProfileClick}></button>
         </div>
       </header>
       
