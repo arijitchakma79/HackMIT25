@@ -1,5 +1,4 @@
 from flask import Blueprint, request, jsonify
-from services.suno_services import SunoService
 
 api_bp = Blueprint("api", __name__)
 
