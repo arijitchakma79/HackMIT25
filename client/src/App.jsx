@@ -43,8 +43,8 @@ function App() {
   }
 
   const handleVisualize = () => {
-    // Handle visualize functionality - for now just log the vibe text
-    console.log('Visualizing vibe:', vibeText)
+    // Navigate to parameters screen for visualization
+    setCurrentScreen('parameters')
   }
 
   if (currentScreen === 'profile') {
