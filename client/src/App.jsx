@@ -97,7 +97,7 @@ function App() {
 
   const handleLogin = (e) => {
     e.preventDefault()
-    if (username === 'user' && password === 'pass') {
+    if (username === 'hacker' && password === 'hackmit') {
       // Check if there's a saved song to determine where to navigate
       const savedSongData = sessionStorage.getItem('synthraCurrentSong');
       let hasSavedSong = false;
