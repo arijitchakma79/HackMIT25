@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { getRandomPattern, applyUserParameters } from './hydraPatterns.js';
 
 const HydraVisual = ({ 
   width = 600, 
@@ -8,6 +9,7 @@ const HydraVisual = ({
   const canvasRef = useRef(null);
   const hydraRef = useRef(null);
   const debugCleanupRef = useRef(null);
+  const [currentPattern, setCurrentPattern] = useState(null);
 
   useEffect(() => {
     const loadHydra = async () => {
@@ -51,38 +53,19 @@ const HydraVisual = ({
               // Set up periodic cleanup for debug canvases
               debugCleanupRef.current = setInterval(hideDebugCanvases, 1000);
               
-              // Execute the visualization code with dynamic parameters
-              const pixelateValue = userParams.pixelate; // 0 to 100
-              const brightnessValue = userParams.brightness; // 0 to 100
-              const invertValue = userParams.invert; // 0 to 100
+              // Select a random pattern
+              const selectedPattern = getRandomPattern();
+              setCurrentPattern(selectedPattern);
               
-              let visualization = osc(100,-0.0018,0.17).diff(osc(20,0.00008).rotate(Math.PI/0.00003))
-                .modulateScale(noise(1.5,0.18).modulateScale(osc(13).rotate(()=>Math.sin(time/22))),3)
-                .color(11,0.5,0.4, 0.9, 0.2, 0.011, 5, 22,  0.5, -1).contrast(1.4)
-                .invert().brightness(0.0003, 2).contrast( 0.5, 2, 0.1, 2).color(4, -2, 0.1)
-                .modulateScale(osc(2),-0.2, 2, 1, 0.3)
-                .posterize(200) .rotate(1, 0.2, 0.01, 0.001)
-                .color(22, -2, 0.5, 0.5, 0.0001,  0.1, 0.2, 8).contrast(0.18, 0.3, 0.1, 0.2, 0.03, 1).brightness(0.0001, -1, 10);
+              // Execute the selected pattern with dynamic parameters
+              let visualization = selectedPattern.pattern(userParams);
               
-              // Apply brightness adjustment (0 = very dark, 50 = normal, 100 = very bright)
-              const brightnessAdjust = (brightnessValue - 50) / 50; // -1 to 1 range
-              visualization = visualization.brightness(brightnessAdjust);
-              
-              // Only apply pixelate if value > 0
-              if (pixelateValue > 0) {
-                const pixelateAmount = Math.max(1, Math.floor((101 - pixelateValue) / 2)); // 1 to 50
-                visualization = visualization.pixelate(pixelateAmount, pixelateAmount);
-              }
-              
-              // Apply color inversion if value > 0
-              if (invertValue > 0) {
-                const invertAmount = invertValue / 100; // 0 to 1
-                visualization = visualization.invert(invertAmount);
-              }
+              // Apply user parameters
+              visualization = applyUserParameters(visualization, userParams);
               
               visualization.out();
                 
-              console.log('Hydra visualization initialized successfully');
+              console.log('Hydra visualization initialized successfully with pattern:', selectedPattern.name);
             } catch (error) {
               console.error('Error executing Hydra code:', error);
               // Fallback to a simple visualization
@@ -162,43 +145,20 @@ const HydraVisual = ({
 
   // Update visualization when parameters change
   useEffect(() => {
-    if (hydraRef.current) {
+    if (hydraRef.current && currentPattern) {
       try {
-        // Execute the visualization code with dynamic parameters
-        const pixelateValue = userParams.pixelate; // 0 to 100
-        const brightnessValue = userParams.brightness; // 0 to 100
-        const invertValue = userParams.invert; // 0 to 100
+        // Execute the current pattern with updated parameters
+        let visualization = currentPattern.pattern(userParams);
         
-        let visualization = osc(100,-0.0018,0.17).diff(osc(20,0.00008).rotate(Math.PI/0.00003))
-          .modulateScale(noise(1.5,0.18).modulateScale(osc(13).rotate(()=>Math.sin(time/22))),3)
-          .color(11,0.5,0.4, 0.9, 0.2, 0.011, 5, 22,  0.5, -1).contrast(1.4)
-          .invert().brightness(0.0003, 2).contrast( 0.5, 2, 0.1, 2).color(4, -2, 0.1)
-          .modulateScale(osc(2),-0.2, 2, 1, 0.3)
-          .posterize(200) .rotate(1, 0.2, 0.01, 0.001)
-          .color(22, -2, 0.5, 0.5, 0.0001,  0.1, 0.2, 8).contrast(0.18, 0.3, 0.1, 0.2, 0.03, 1).brightness(0.0001, -1, 10);
-        
-        // Apply brightness adjustment (0 = very dark, 50 = normal, 100 = very bright)
-        const brightnessAdjust = (brightnessValue - 50) / 50; // -1 to 1 range
-        visualization = visualization.brightness(brightnessAdjust);
-        
-        // Only apply pixelate if value > 0
-        if (pixelateValue > 0) {
-          const pixelateAmount = Math.max(1, Math.floor((101 - pixelateValue) / 2)); // 1 to 50
-          visualization = visualization.pixelate(pixelateAmount, pixelateAmount);
-        }
-        
-        // Apply color inversion if value > 0
-        if (invertValue > 0) {
-          const invertAmount = invertValue / 100; // 0 to 1
-          visualization = visualization.invert(invertAmount);
-        }
+        // Apply user parameters
+        visualization = applyUserParameters(visualization, userParams);
         
         visualization.out();
       } catch (error) {
         console.error('Error updating visualization with parameters:', error);
       }
     }
-  }, [userParams]);
+  }, [userParams, currentPattern]);
 
   return (
     <canvas
