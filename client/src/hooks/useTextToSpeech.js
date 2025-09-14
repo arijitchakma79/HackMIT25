@@ -15,23 +15,25 @@ const useTextToSpeech = () => {
     return availableVoices;
   }, [isSupported]);
 
-  // Find a good DJ voice (prefer male, deep voices)
-  const getDJVoice = useCallback(() => {
+  // Find Mac male voice
+  const getMacMaleVoice = useCallback(() => {
     const availableVoices = voices.length > 0 ? voices : loadVoices();
     
-    // Try to find a good DJ voice
+    // Prioritize Mac male voices
     const preferredVoices = [
-      // Look for specific voice names that sound good for DJ
-      availableVoices.find(voice => voice.name.includes('Daniel')),
-      availableVoices.find(voice => voice.name.includes('Alex')),
-      availableVoices.find(voice => voice.name.includes('Fred')),
-      availableVoices.find(voice => voice.name.includes('Diego')),
-      // Look for male voices
+      // Mac male voices in order of preference
+      availableVoices.find(voice => voice.name.includes('Alex')), // Mac default male
+      availableVoices.find(voice => voice.name.includes('Daniel')), // Mac male
+      availableVoices.find(voice => voice.name.includes('Fred')), // Mac male
+      availableVoices.find(voice => voice.name.includes('Ralph')), // Mac male
+      availableVoices.find(voice => voice.name.includes('Jorge')), // Mac Spanish male
+      // Any voice with "male" in the name
       availableVoices.find(voice => voice.name.toLowerCase().includes('male')),
-      // Look for deep or bass voices
-      availableVoices.find(voice => voice.name.toLowerCase().includes('deep')),
-      availableVoices.find(voice => voice.name.toLowerCase().includes('bass')),
+      // Google/Microsoft male voices as backup
+      availableVoices.find(voice => voice.name.includes('Google US English') && voice.name.toLowerCase().includes('male')),
+      availableVoices.find(voice => voice.name.includes('Microsoft') && voice.name.toLowerCase().includes('male')),
       // Fallback to any English voice
+      availableVoices.find(voice => voice.lang.startsWith('en-US')),
       availableVoices.find(voice => voice.lang.startsWith('en')),
       // Final fallback
       availableVoices[0]
@@ -51,14 +53,14 @@ const useTextToSpeech = () => {
       utteranceRef.current = utterance;
 
       // Set voice
-      const djVoice = getDJVoice();
-      if (djVoice) {
-        utterance.voice = djVoice;
+      const macMaleVoice = getMacMaleVoice();
+      if (macMaleVoice) {
+        utterance.voice = macMaleVoice;
       }
 
-      // Configure utterance for DJ personality
-      utterance.rate = options.rate || 0.9; // Slightly slower for DJ effect
-      utterance.pitch = options.pitch || 0.8; // Slightly deeper for DJ effect
+      // Configure utterance for natural, casual speech
+      utterance.rate = options.rate || 1.1; // Normal to slightly faster for casual feel
+      utterance.pitch = options.pitch || 1.0; // Natural pitch
       utterance.volume = options.volume || 1;
 
       // Event handlers
@@ -79,7 +81,7 @@ const useTextToSpeech = () => {
       // Speak the text
       speechSynthesis.speak(utterance);
     });
-  }, [isSupported, getDJVoice]);
+  }, [isSupported, getMacMaleVoice]);
 
   const stop = useCallback(() => {
     if (speechSynthesis.speaking) {
