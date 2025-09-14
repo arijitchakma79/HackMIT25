@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import './LoginPopup.css'
 import './SavedSong.css'
+import HydraVisual from './HydraVisual.jsx'
 
 // Helper function to format time in MM:SS format
 const formatTime = (timeInSeconds) => {
@@ -283,7 +284,7 @@ function App() {
         
         <main className="parameters-screen">
           <div className="left-panel">
-            <img src="/splash.png" alt="Splash" className="splash-image" />
+            <HydraVisual width={600} height={600} />
           </div>
           <div className="right-panel">
             <h2 className="parameters-title">Parameters</h2>
