@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import './LoginPopup.css'
 import './SavedSong.css'
 import HydraVisual from './HydraVisual.jsx'
 import VoiceInput from './components/VoiceInput'
+import AudioAnalyzer from './AudioAnalyzer.js'
 
 // Helper function to format time in MM:SS format
 const formatTime = (timeInSeconds) => {
@@ -24,11 +25,25 @@ function App() {
   const [email, setEmail] = useState('')
   const [createError, setCreateError] = useState('')
   const [editingIndex, setEditingIndex] = useState(null)
-  const parameterNames = ['Kalied', 'Pixelate', 'Modulate', 'param 4']
+  const parameterNames = [
+    'Dreamscape (blur)', 
+    'Pixelverse (pixelate)', 
+    'Spectrum (color)', 
+    'Kaleidoscope (kaleid)'
+  ]
 
   const [currentScreen, setCurrentScreen] = useState('home') // 'home', 'main', 'parameters', 'profile'
-  // Sliders state for parameters screen
-  const [sliderValues, setSliderValues] = useState([95, 95, 95, 95]);
+  // Sliders state for parameters screen (user-controlled)
+  const [sliderValues, setSliderValues] = useState([50, 30, 180, 40]);
+  // Audio analysis state (song-controlled)
+  const [audioData, setAudioData] = useState({
+    bass: 0,
+    mid: 0,
+    treble: 0,
+    tempo: 120,
+    mood: 'happy', // 'happy' or 'dark'
+    intensity: 0
+  });
   // Text input state for main screen
   const [vibeText, setVibeText] = useState('');
   // Audio playback state
@@ -37,6 +52,62 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+
+  // Refs for audio analysis
+  const audioElementRef = useRef(null);
+  const audioAnalyzerRef = useRef(null);
+
+  // Initialize audio analyzer when audio is loaded
+  useEffect(() => {
+    if (audioUrl && audioElementRef.current) {
+      const initializeAnalyzer = async () => {
+        try {
+          if (!audioAnalyzerRef.current) {
+            audioAnalyzerRef.current = new AudioAnalyzer();
+            await audioAnalyzerRef.current.initialize();
+          }
+          
+          // Start analysis when audio starts playing
+          const audioElement = audioElementRef.current;
+          
+          const handlePlay = () => {
+            audioAnalyzerRef.current.startAnalysis(audioElement, (data) => {
+              setAudioData(data);
+            });
+          };
+          
+          const handlePause = () => {
+            if (audioAnalyzerRef.current) {
+              audioAnalyzerRef.current.stopAnalysis();
+            }
+          };
+          
+          audioElement.addEventListener('play', handlePlay);
+          audioElement.addEventListener('pause', handlePause);
+          audioElement.addEventListener('ended', handlePause);
+          
+          // Cleanup
+          return () => {
+            audioElement.removeEventListener('play', handlePlay);
+            audioElement.removeEventListener('pause', handlePause);
+            audioElement.removeEventListener('ended', handlePause);
+          };
+        } catch (error) {
+          console.error('Error initializing audio analyzer:', error);
+        }
+      };
+      
+      initializeAnalyzer();
+    }
+  }, [audioUrl]);
+
+  // Convert slider values to the format expected by HydraVisual
+  const userParams = {
+    blur: sliderValues[0],
+    pixelate: sliderValues[1], 
+    color: sliderValues[2],
+    kaleid: sliderValues[3]
+  };
 
   // Restore song data from sessionStorage on component mount
   useEffect(() => {
@@ -289,7 +360,13 @@ function App() {
         
         <main className="parameters-screen">
           <div className="left-panel">
-            <HydraVisual width={600} height={600} />
+            <HydraVisual 
+              width={600} 
+              height={600} 
+              userParams={userParams}
+              audioData={audioData}
+              audioElement={audioElementRef.current}
+            />
           </div>
           <div className="right-panel">
             <h2 className="parameters-title">Parameters</h2>
@@ -330,6 +407,7 @@ function App() {
                   <p>Based on: "{vibeText}"</p>
                 </div>
                 <audio 
+                  ref={audioElementRef}
                   src={audioUrl}
                   controls
                   className="audio-element-params"
