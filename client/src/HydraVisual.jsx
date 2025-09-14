@@ -4,7 +4,7 @@ import { getRandomPattern, applyUserParameters } from './hydraPatterns.js';
 const HydraVisual = ({ 
   width = 600, 
   height = 600,
-  userParams = { pixelate: 30, brightness: 50, invert: 0 }
+  userParams = { pixelate: 0, brightness: 50, invert: 5 }
 }) => {
   const canvasRef = useRef(null);
   const hydraRef = useRef(null);
@@ -57,15 +57,15 @@ const HydraVisual = ({
               const selectedPattern = getRandomPattern();
               setCurrentPattern(selectedPattern);
               
-              // Execute the selected pattern with dynamic parameters
-              let visualization = selectedPattern.pattern(userParams);
+              // Execute the selected pattern with dynamic parameters and colors
+              let visualization = selectedPattern.pattern(userParams, selectedPattern.colors);
               
               // Apply user parameters
               visualization = applyUserParameters(visualization, userParams);
               
               visualization.out();
                 
-              console.log('Hydra visualization initialized successfully with pattern:', selectedPattern.name);
+              console.log('Hydra visualization initialized successfully with pattern:', selectedPattern.name, 'and colors:', selectedPattern.colors);
             } catch (error) {
               console.error('Error executing Hydra code:', error);
               // Fallback to a simple visualization
@@ -147,8 +147,8 @@ const HydraVisual = ({
   useEffect(() => {
     if (hydraRef.current && currentPattern) {
       try {
-        // Execute the current pattern with updated parameters
-        let visualization = currentPattern.pattern(userParams);
+        // Execute the current pattern with updated parameters and colors
+        let visualization = currentPattern.pattern(userParams, currentPattern.colors);
         
         // Apply user parameters
         visualization = applyUserParameters(visualization, userParams);
