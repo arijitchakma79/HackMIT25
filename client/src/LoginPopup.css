@@ -7,24 +7,42 @@
   position: absolute;
   top: 100%;
   right: -8px;
-  width: 280px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 320px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
   z-index: 1000;
   margin: 16px 8px 0 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .login-popup-header {
-  padding: 16px;
-  border-bottom: 1px solid #eee;
+  padding: 20px 24px 16px 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: linear-gradient(135deg, rgba(229, 115, 115, 0.1) 0%, rgba(255, 171, 145, 0.1) 100%);
+  border-radius: 16px 16px 0 0;
 }
 
 .login-popup-header h3 {
   margin: 0;
-  font-size: 18px;
-  font-weight: normal;
-  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+  text-align: center;
+  font-family: "Host Grotesk", sans-serif;
 }
 
 .tab-container {
@@ -34,13 +52,38 @@
 .tab {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
+  padding: 16px 24px;
   cursor: pointer;
-  background-color: #e57373;
-  color: #333;
-  font-size: 14px;
-  gap: 8px;
-  margin-bottom: 4px;
+  background: linear-gradient(135deg, #e57373 0%, #ef5350 100%);
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  gap: 12px;
+  margin-bottom: 2px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.tab:hover::before {
+  left: 100%;
+}
+
+.tab:hover {
+  background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(229, 115, 115, 0.3);
 }
 
 .tab:first-child {
@@ -60,12 +103,14 @@
 }
 
 .tab.active {
-  background-color: #e57373;
+  background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .tab-arrow {
-  font-size: 12px;
-  transition: transform 0.2s;
+  font-size: 14px;
+  transition: transform 0.3s ease;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .tab.active .tab-arrow {
@@ -73,10 +118,27 @@
 }
 
 .tab-content {
-  padding: 16px;
-  background-color: #e57373;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(229, 115, 115, 0.95) 0%, rgba(239, 83, 80, 0.95) 100%);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  backdrop-filter: blur(5px);
+  animation: expandContent 0.3s ease-out;
+}
+
+@keyframes expandContent {
+  from {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 400px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
 }
 
 .signin-tab-content {
@@ -85,44 +147,111 @@
 }
 
 .form-group {
-  margin-bottom: 12px;
+  margin-bottom: 20px;
+  position: relative;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
   font-size: 14px;
-  color: #333;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .form-group input {
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
+  padding: 12px 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  font-size: 15px;
   box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.9);
+  color: #2c3e50;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #fff;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.form-group input:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.form-group input::placeholder {
+  color: #95a5a6;
+  font-style: italic;
 }
 
 .signin-btn {
-  background-color: #666;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
   color: white;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: 14px 28px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 14px;
-  margin-top: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 16px;
+  width: 100%;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.signin-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.signin-btn:hover::before {
+  left: 100%;
 }
 
 .signin-btn:hover {
-  background-color: #555;
+  background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(44, 62, 80, 0.4);
 }
 
+.signin-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.3);
+}
+
+
 .error-message {
-  color: #d32f2f;
-  font-size: 12px;
-  margin-top: 4px;
+  color: #fff;
+  background: rgba(211, 47, 47, 0.9);
+  font-size: 13px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 4px solid #f44336;
+  animation: shakeError 0.5s ease-in-out;
+  backdrop-filter: blur(5px);
+}
+
+@keyframes shakeError {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
 }
 
 .param-value {
@@ -147,4 +276,132 @@
   text-align: center;
   background-color: white;
   color: #333;
+}
+
+/* Enhanced form input styles for error states */
+.form-group input.error {
+  border-color: #f44336 !important;
+  background: rgba(244, 67, 54, 0.1) !important;
+  box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.2) !important;
+}
+
+.form-group input.error:focus {
+  border-color: #d32f2f !important;
+  box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.3) !important;
+}
+
+/* Loading state for buttons */
+.signin-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%) !important;
+}
+
+.signin-btn:disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Loading spinner for form submission */
+.signin-btn:disabled::after {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-left: 8px;
+  border: 2px solid transparent;
+  border-top: 2px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Success message styling */
+.success-message {
+  color: #fff;
+  background: rgba(76, 175, 80, 0.9);
+  font-size: 13px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 4px solid #4caf50;
+  backdrop-filter: blur(5px);
+  animation: slideInSuccess 0.3s ease-out;
+}
+
+@keyframes slideInSuccess {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design improvements */
+@media (max-width: 768px) {
+  .login-popup {
+    width: 280px;
+    margin: 8px 4px 0 4px;
+    right: -4px;
+  }
+  
+  .login-popup-header {
+    padding: 16px 20px 12px 20px;
+  }
+  
+  .tab-content {
+    padding: 20px;
+  }
+  
+  .form-group input {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+  
+  .signin-btn {
+    padding: 12px 24px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-popup {
+    width: calc(100vw - 32px);
+    right: 16px;
+    left: 16px;
+    margin: 8px 0 0 0;
+  }
+}
+
+/* Enhanced accessibility */
+.form-group input:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.signin-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* Improved tab transitions */
+.tab:not(.active) {
+  opacity: 0.9;
+}
+
+.tab:not(.active):hover {
+  opacity: 1;
+}
+
+/* Better visual hierarchy */
+.login-popup-header h3::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(135deg, #e57373 0%, #ef5350 100%);
+  margin: 8px auto 0;
+  border-radius: 1px;
 }

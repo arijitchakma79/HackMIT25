@@ -1,0 +1,190 @@
+/* Responsive Design Improvements */
+@media (max-width: 1200px) {
+  .parameters-screen {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+  }
+  
+  .left-panel, .right-panel {
+    flex: none;
+    height: auto;
+  }
+  
+  .left-panel {
+    height: 400px;
+  }
+  
+  .vibe-input-container {
+    width: 100%;
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 16px 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
+  
+  .header-right {
+    gap: 12px;
+  }
+  
+  .home-button, .new-song-button, .generated-song-button, .discard-song-button, .login-text {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  
+  .main-screen {
+    padding: 24px 16px;
+  }
+  
+  .vibe-input-container {
+    width: 100%;
+    padding: 24px;
+  }
+  
+  .vibe-input {
+    padding: 16px;
+    font-size: 16px;
+  }
+  
+  .button-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .add-vocals-btn, .visualize-btn {
+    padding: 14px 24px;
+  }
+  
+  .slogan {
+    font-size: clamp(24px, 8vw, 48px);
+    padding: 0 16px;
+  }
+  
+  .parameters-screen {
+    padding: 16px;
+  }
+  
+  .right-panel {
+    padding: 24px;
+  }
+  
+  .parameters-title {
+    font-size: 24px;
+    margin-bottom: 32px;
+  }
+  
+  .parameter-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 16px;
+  }
+  
+  .param-label {
+    min-width: auto;
+    width: auto;
+    text-align: center;
+  }
+  
+  .slider-container {
+    gap: 16px;
+  }
+  
+  .profile-content {
+    padding: 24px 16px;
+    margin-top: 16px;
+  }
+  
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 24px;
+  }
+  
+  .profile-picture {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 12px 16px;
+  }
+  
+  .title {
+    font-size: 20px;
+  }
+  
+  .header-right {
+    gap: 8px;
+  }
+  
+  .home-button, .new-song-button, .generated-song-button, .discard-song-button, .login-text {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  
+  .login-button {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .vibe-input-container {
+    padding: 20px;
+  }
+  
+  .vibe-input {
+    padding: 14px;
+    font-size: 14px;
+  }
+  
+  .add-vocals-btn, .visualize-btn {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+  
+  .right-panel {
+    padding: 20px;
+  }
+  
+  .parameters-title {
+    font-size: 20px;
+  }
+  
+  .param-label {
+    font-size: 14px;
+  }
+  
+  .param-value {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+  
+  .profile-content {
+    padding: 20px 12px;
+  }
+  
+  .profile-picture {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .profile-name {
+    font-size: 28px;
+  }
+  
+  .saved-songs-title {
+    font-size: 22px;
+  }
+}

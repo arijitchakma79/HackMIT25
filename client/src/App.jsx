@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import './LoginPopup.css'
 import './SavedSong.css'
+import './responsive.css'
 import HydraVisual from './HydraVisual.jsx'
 import VoiceInput from './components/VoiceInput'
+import LoginPage from './LoginPage.jsx'
 
 // Helper function to format time in MM:SS format
 const formatTime = (timeInSeconds) => {
@@ -15,15 +16,13 @@ const formatTime = (timeInSeconds) => {
 
 function App() {
 
-  const [showLoginPopup, setShowLoginPopup] = useState(false)
-  const [activeTab, setActiveTab] = useState('signin') // 'signin' or 'create'
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [loginError, setLoginError] = useState('')
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [createError, setCreateError] = useState('')
+  const [showLoginPage, setShowLoginPage] = useState(false)
   const [editingIndex, setEditingIndex] = useState(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [user, setUser] = useState(null)
+  const [savedSongs, setSavedSongs] = useState([])
+  const [currentSong, setCurrentSong] = useState(null)
+  const [audioElement, setAudioElement] = useState(null)
   const parameterNames = [
     'Pixelverse (pixelate)', 
     'Luminance (brightness)', 
@@ -37,7 +36,7 @@ function App() {
   const [vibeText, setVibeText] = useState('');
   // Audio playback state
   const [audioUrl, setAudioUrl] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -102,38 +101,13 @@ function App() {
 
 
   const handleLoginClick = () => {
-    setShowLoginPopup(!showLoginPopup)
+    setShowLoginPage(true)
   }
 
-  const handleLogin = (e) => {
-    e.preventDefault()
-    if (username === 'hacker' && password === 'hackmit') {
-      // Check if there's a saved song to determine where to navigate
-      const savedSongData = sessionStorage.getItem('synthraCurrentSong');
-      let hasSavedSong = false;
-      
-      if (savedSongData) {
-        try {
-          const songData = JSON.parse(savedSongData);
-          hasSavedSong = songData.audioUrl;
-        } catch (error) {
-          console.error('Error checking saved song data:', error);
-        }
-      }
-      
-      // Navigate to parameters if there's a saved song, otherwise to main
-      setCurrentScreen(hasSavedSong ? 'parameters' : 'main')
-      setShowLoginPopup(false)
-      setLoginError('')
-      setUsername('')
-      setPassword('')
-    } else {
-      setLoginError('Invalid username or password')
-    }
-  }
-
-  const handleCreateAccount = (e) => {
-    e.preventDefault()
+  const handleLoginSuccess = (userData) => {
+    setIsLoggedIn(true)
+    setUser(userData)
+    setShowLoginPage(false)
     // Check if there's a saved song to determine where to navigate
     const savedSongData = sessionStorage.getItem('synthraCurrentSong');
     let hasSavedSong = false;
@@ -149,17 +123,17 @@ function App() {
     
     // Navigate to parameters if there's a saved song, otherwise to main
     setCurrentScreen(hasSavedSong ? 'parameters' : 'main')
-    setShowLoginPopup(false)
-    setCreateError('')
-    setName('')
-    setEmail('')
-    setUsername('')
-    setPassword('')
   }
+
+  const handleBackToApp = () => {
+    setShowLoginPage(false)
+  }
+
 
   const handleLogout = () => {
     setCurrentScreen('home')
-    setShowLoginPopup(false)
+    setIsLoggedIn(false)
+    setUser(null)
     // Clear song data when logging out
     clearSongFromSession();
     setAudioUrl(null);
@@ -201,7 +175,7 @@ function App() {
       return;
     }
 
-    setIsLoading(true);
+    setIsGenerating(true);
     setAudioUrl(null);
     
     try {
@@ -234,7 +208,7 @@ function App() {
       console.error('Error details:', error.message);
       alert(`Failed to generate music: ${error.message}. Please try again.`);
     } finally {
-      setIsLoading(false);
+      setIsGenerating(false);
     }
   }
 
@@ -465,7 +439,7 @@ function App() {
           <div className="vibe-input-container">
             <VoiceInput 
               onTranscriptChange={handleVoiceTranscript}
-              disabled={isLoading}
+              disabled={isGenerating}
               placeholder="Click to start voice input"
             />
             
@@ -475,17 +449,17 @@ function App() {
               placeholder="Describe your vision... or use voice input above"
               value={vibeText}
               onChange={(e) => setVibeText(e.target.value)}
-              disabled={isLoading}
+              disabled={isGenerating}
             />
             
             <div className="button-row">
-              <button className="add-vocals-btn" onClick={handleAddVocals} disabled={isLoading}>Add vocals</button>
-              <button className="visualize-btn" onClick={handleVisualize} disabled={isLoading}>
-                {isLoading ? 'Generating...' : 'Visualize'}
+              <button className="add-vocals-btn" onClick={handleAddVocals} disabled={isGenerating}>Add vocals</button>
+              <button className="visualize-btn" onClick={handleVisualize} disabled={isGenerating}>
+                {isGenerating ? 'Generating...' : 'Visualize'}
               </button>
             </div>
             
-            {isLoading && (
+            {isGenerating && (
               <div className="loading-state">
                 <div className="loading-spinner"></div>
                 <p>Generating your music... This may take up to 2 minutes.</p>
@@ -497,110 +471,25 @@ function App() {
     )
   }
 
+  // Show login page if requested
+  if (showLoginPage) {
+    return <LoginPage onLogin={handleLoginSuccess} onBack={handleBackToApp} />
+  }
+
   return (
     <div className="app">
       <header className="header">
         <div className="title">Synthra</div>
         <div className="header-right">
-          <button className="login-text" onClick={handleLoginClick}>Login</button>
-          <button className="login-button"></button>
-          {showLoginPopup && (
-            <div className="login-popup">
-              <div className="login-popup-header">
-                <h3>Sign In</h3>
-              </div>
-              
-              <div className="tab-container">
-                <div 
-                  className={`tab ${activeTab === 'signin' ? 'active' : ''}`}
-                  onClick={() => setActiveTab(activeTab === 'signin' ? '' : 'signin')}
-                >
-                  <span className="tab-arrow">▶</span>
-                  <span>Sign In</span>
-                </div>
-                
-                {activeTab === 'signin' && (
-                  <div className="tab-content signin-tab-content">
-                    <form onSubmit={handleLogin}>
-                      <div className="form-group">
-                        <label>Username:</label>
-                        <input
-                          type="text"
-                          value={username}
-                          onChange={(e) => setUsername(e.target.value)}
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Password:</label>
-                        <input
-                          type="password"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          required
-                        />
-                      </div>
-                      {loginError && <div className="error-message">{loginError}</div>}
-                      <button type="submit" className="signin-btn">Sign In</button>
-                    </form>
-                  </div>
-                )}
-                
-                <div 
-                  className={`tab ${activeTab === 'create' ? 'active' : ''}`}
-                  onClick={() => setActiveTab(activeTab === 'create' ? '' : 'create')}
-                >
-                  <span className="tab-arrow">▶</span>
-                  <span>Create An Account</span>
-                </div>
-                
-                {activeTab === 'create' && (
-                  <div className="tab-content">
-                    <form onSubmit={handleCreateAccount}>
-                      <div className="form-group">
-                        <label>Name:</label>
-                        <input
-                          type="text"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Email:</label>
-                        <input
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Username:</label>
-                        <input
-                          type="text"
-                          value={username}
-                          onChange={(e) => setUsername(e.target.value)}
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Password:</label>
-                        <input
-                          type="password"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          required
-                        />
-                      </div>
-                      {createError && <div className="error-message">{createError}</div>}
-                      <button type="submit" className="signin-btn">Create Account</button>
-                    </form>
-                  </div>
-                )}
-              </div>
-            </div>
+          {isLoggedIn ? (
+            <>
+              <span className="user-name">Welcome, {user?.name || user?.email}</span>
+              <button className="logout-button" onClick={handleLogout}>Logout</button>
+            </>
+          ) : (
+            <button className="login-text" onClick={handleLoginClick}>Login</button>
           )}
+          <button className="login-button" onClick={handleProfileClick}></button>
         </div>
       </header>
       
