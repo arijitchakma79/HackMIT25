@@ -53,8 +53,8 @@ const HydraVisual = ({
               // Set up periodic cleanup for debug canvases
               debugCleanupRef.current = setInterval(hideDebugCanvases, 1000);
               
-              // Select a random pattern
-              const selectedPattern = getRandomPattern();
+              // Select a random pattern influenced by user parameters
+              const selectedPattern = getRandomPattern(userParams);
               setCurrentPattern(selectedPattern);
               
               // Execute the selected pattern with dynamic parameters and colors
@@ -62,6 +62,7 @@ const HydraVisual = ({
               
               // Apply user parameters
               visualization = applyUserParameters(visualization, userParams);
+              
               
               visualization.out();
                 

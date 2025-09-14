@@ -26,9 +26,9 @@ function App() {
   const [createError, setCreateError] = useState('')
   const [editingIndex, setEditingIndex] = useState(null)
   const parameterNames = [
-    'Pixelverse (pixelate)', 
-    'Luminance (brightness)', 
-    'Inversion (invert)'
+    'pixelverse (pixelate)', 
+    'luminance (brightness)', 
+    'inversion (invert)'
   ]
 
   const [currentScreen, setCurrentScreen] = useState('home') // 'home', 'main', 'parameters', 'profile'
