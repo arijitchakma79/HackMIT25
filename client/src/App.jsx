@@ -1,5 +1,6 @@
 
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import './App.css'
 
 const APP_TITLE = 'Synthra';
@@ -49,119 +50,406 @@ function App() {
 
   if (currentScreen === 'profile') {
     return (
-      <div className="app">
-        <header className="header">
-          <div className="title">{APP_TITLE}</div>
-          <div className="header-right">
-            <button className="home-button" onClick={handleHomeClick}>Home</button>
-          </div>
-        </header>
-        
-        <main className="profile-content">
-          <div className="profile-header">
-            <div className="profile-picture"></div>
-            <div className="profile-info">
-              <h2 className="profile-name">Profile Name</h2>
-              <p className="profile-bio">Bio words:</p>
+      <AnimatePresence mode="wait">
+        <motion.div 
+          className="app"
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -100 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.header 
+            className="header"
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            <motion.div 
+              className="title"
+              whileHover={{ color: "#ff4444", scale: 1.05 }}
+            >
+              {APP_TITLE}
+            </motion.div>
+            <div className="header-right">
+              <motion.button 
+                className="home-button" 
+                onClick={handleHomeClick}
+                whileHover={{ 
+                  color: "#ff4444",
+                  backgroundColor: "rgba(255, 68, 68, 0.1)",
+                  y: -2
+                }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Home
+              </motion.button>
             </div>
-          </div>
+          </motion.header>
           
-          <div className="saved-songs-section">
-            <h3 className="saved-songs-title">Saved Songs:</h3>
-            <div className="songs-list">
-              <div className="song-item">Song1 - Vibe description</div>
-              <div className="song-item">Song2 - Vibe description</div>
-              <div className="song-item">Song3 - Vibe description</div>
-              <div className="song-item">Song4 - Vibe description</div>
-            </div>
-          </div>
-        </main>
-      </div>
+          <motion.main 
+            className="profile-content"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+          >
+            <motion.div 
+              className="profile-header"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <motion.div 
+                className="profile-picture"
+                whileHover={{ scale: 1.05, rotate: 5 }}
+              ></motion.div>
+              <div className="profile-info">
+                <motion.h2 
+                  className="profile-name"
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.6 }}
+                >
+                  Profile Name
+                </motion.h2>
+                <motion.p 
+                  className="profile-bio"
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.7 }}
+                >
+                  Bio words:
+                </motion.p>
+              </div>
+            </motion.div>
+            
+            <motion.div 
+              className="saved-songs-section"
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
+              <motion.h3 
+                className="saved-songs-title"
+                initial={{ x: -20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.8 }}
+              >
+                Saved Songs:
+              </motion.h3>
+              <motion.div className="songs-list">
+                {['Song1 - Vibe description', 'Song2 - Vibe description', 'Song3 - Vibe description', 'Song4 - Vibe description'].map((song, index) => (
+                  <motion.div 
+                    key={index}
+                    className="song-item"
+                    initial={{ x: -30, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 0.4, delay: 0.9 + index * 0.1 }}
+                    whileHover={{ 
+                      x: 10, 
+                      backgroundColor: "rgba(255, 68, 68, 0.1)",
+                      transition: { duration: 0.2 }
+                    }}
+                  >
+                    {song}
+                  </motion.div>
+                ))}
+              </motion.div>
+            </motion.div>
+          </motion.main>
+        </motion.div>
+      </AnimatePresence>
     )
   }
 
   if (currentScreen === 'parameters') {
     return (
-      <div className="app parameters-app">
-        <header className="header">
-          <div className="title">{APP_TITLE}</div>
-          <div className="header-right">
-            <button className="home-button" onClick={handleHomeClick}>Home</button>
-          </div>
-        </header>
-        <main className="parameters-screen">
-          <div className="left-panel">
-            <img src="/splash.png" alt="Splash" className="splash-image" />
-          </div>
-          <div className="right-panel">
-            <h2 className="parameters-title">Parameters</h2>
-            <div className="parameters-list">
-              {[0, 1, 2, 3].map((idx) => (
-                <div className="parameter-item" key={idx}>
-                  <span className="param-label">Param</span>
-                  <div className="slider-container">
-                    <input
-                      type="range"
-                      className="param-slider"
-                      min="0"
-                      max="100"
-                      value={sliderValues[idx]}
-                      onChange={e => handleSliderChange(idx, Number(e.target.value))}
-                    />
-                    <span className="param-value">{sliderValues[idx]}%</span>
-                  </div>
-                </div>
-              ))}
+      <AnimatePresence mode="wait">
+        <motion.div 
+          className="app parameters-app"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.05 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.header 
+            className="header"
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            <motion.div 
+              className="title"
+              whileHover={{ color: "#ff4444", scale: 1.05 }}
+            >
+              {APP_TITLE}
+            </motion.div>
+            <div className="header-right">
+              <motion.button 
+                className="home-button" 
+                onClick={handleHomeClick}
+                whileHover={{ 
+                  color: "#ff4444",
+                  backgroundColor: "rgba(255, 68, 68, 0.1)",
+                  y: -2
+                }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Home
+              </motion.button>
             </div>
-          </div>
-        </main>
-      </div>
+          </motion.header>
+          <motion.main 
+            className="parameters-screen"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <motion.div 
+              className="left-panel"
+              initial={{ x: -100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
+            >
+              <motion.img 
+                src="/splash.png" 
+                alt="Splash" 
+                className="splash-image"
+                whileHover={{ scale: 1.05, rotate: 2 }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.div>
+            <motion.div 
+              className="right-panel"
+              initial={{ x: 100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
+            >
+              <motion.h2 
+                className="parameters-title"
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+              >
+                Parameters
+              </motion.h2>
+              <motion.div className="parameters-list">
+                {[0, 1, 2, 3].map((idx) => (
+                  <motion.div 
+                    className="parameter-item" 
+                    key={idx}
+                    initial={{ x: 50, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.7 + idx * 0.1 }}
+                    whileHover={{ 
+                      x: 5,
+                      backgroundColor: "rgba(255, 68, 68, 0.05)",
+                      transition: { duration: 0.2 }
+                    }}
+                  >
+                    <span className="param-label">Param</span>
+                    <div className="slider-container">
+                      <motion.input
+                        type="range"
+                        className="param-slider"
+                        min="0"
+                        max="100"
+                        value={sliderValues[idx]}
+                        onChange={e => handleSliderChange(idx, Number(e.target.value))}
+                        whileHover={{ scale: 1.02 }}
+                        whileFocus={{ scale: 1.02 }}
+                      />
+                      <motion.span 
+                        className="param-value"
+                        key={sliderValues[idx]}
+                        initial={{ scale: 1.2, color: "#ff4444" }}
+                        animate={{ scale: 1, color: "#333" }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {sliderValues[idx]}%
+                      </motion.span>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </motion.div>
+          </motion.main>
+        </motion.div>
+      </AnimatePresence>
     )
   }
 
   if (currentScreen === 'main') {
     return (
-      <div className="app">
-        <header className="header">
-          <div className="title">{APP_TITLE}</div>
-          <div className="header-right">
-            <button className="home-button" onClick={handleHomeClick}>Home</button>
-          </div>
-        </header>
-        
-        <main className="main-screen">
-          <div className="vibe-input-container">
-            <input 
-              type="text" 
-              className="vibe-input" 
-              placeholder="Describe your vision..."
-              value={vibeText}
-              onChange={(e) => setVibeText(e.target.value)}
-            />
-            <div className="button-row">
-              <button className="add-vocals-btn" onClick={handleAddVocals}>Add vocals</button>
-              <button className="visualize-btn" onClick={handleVisualize}>Visualize</button>
+      <AnimatePresence mode="wait">
+        <motion.div 
+          className="app"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.header 
+            className="header"
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            <motion.div 
+              className="title"
+              whileHover={{ color: "#ff4444", scale: 1.05 }}
+            >
+              {APP_TITLE}
+            </motion.div>
+            <div className="header-right">
+              <motion.button 
+                className="home-button" 
+                onClick={handleHomeClick}
+                whileHover={{ 
+                  color: "#ff4444",
+                  backgroundColor: "rgba(255, 68, 68, 0.1)",
+                  y: -2
+                }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Home
+              </motion.button>
             </div>
-          </div>
-        </main>
-      </div>
+          </motion.header>
+          
+          <motion.main 
+            className="main-screen"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+          >
+            <motion.div 
+              className="vibe-input-container"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <motion.input 
+                type="text" 
+                className="vibe-input" 
+                placeholder="Describe your vision..."
+                value={vibeText}
+                onChange={(e) => setVibeText(e.target.value)}
+                whileFocus={{ 
+                  scale: 1.02,
+                  borderColor: "#ff4444",
+                  boxShadow: "0 0 0 3px rgba(255, 68, 68, 0.1)"
+                }}
+                transition={{ duration: 0.2 }}
+              />
+              <motion.div 
+                className="button-row"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+              >
+                <motion.button 
+                  className="add-vocals-btn" 
+                  onClick={handleAddVocals}
+                  whileHover={{ 
+                    scale: 1.05,
+                    backgroundColor: "#ff6666",
+                    y: -2
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  Add vocals
+                </motion.button>
+                <motion.button 
+                  className="visualize-btn" 
+                  onClick={handleVisualize}
+                  whileHover={{ 
+                    scale: 1.05,
+                    backgroundColor: "#f0f0f0",
+                    y: -2
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  Visualize
+                </motion.button>
+              </motion.div>
+            </motion.div>
+          </motion.main>
+        </motion.div>
+      </AnimatePresence>
     )
   }
 
   return (
-    <div className="app">
-      <header className="header">
-  <div className="title">{APP_TITLE}</div>
+    <motion.div 
+      className="app"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.header 
+        className="header"
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <motion.div 
+          className="title"
+          whileHover={{ 
+            color: "#ff4444", 
+            scale: 1.05,
+            transition: { duration: 0.3 }
+          }}
+        >
+          {APP_TITLE}
+        </motion.div>
         <div className="header-right">
-          <button className="login-text" onClick={handleLogin}>Login</button>
-          <button className="login-button" onClick={handleProfileClick}></button>
+          <motion.button 
+            className="login-text" 
+            onClick={handleLogin}
+            whileHover={{ 
+              y: -2,
+              color: "#ff4444",
+              transition: { duration: 0.3 }
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Login
+          </motion.button>
+          <motion.button 
+            className="login-button" 
+            onClick={handleProfileClick}
+            whileHover={{ 
+              scale: 1.1, 
+              rotate: 5,
+              backgroundColor: "#ff6666",
+              boxShadow: "0 4px 16px rgba(255, 68, 68, 0.5)",
+              transition: { duration: 0.3 }
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
+          </motion.button>
         </div>
-      </header>
+      </motion.header>
       
-      <main className="main-content">
-        <h1 className="slogan">synthesize your musical + artistic visions</h1>
-      </main>
-    </div>
+      <motion.main 
+        className="main-content"
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
+      >
+        <motion.h1 
+          className="slogan"
+          whileHover={{ 
+            scale: 1.02,
+            transition: { duration: 0.3 }
+          }}
+        >
+          synthesize your musical + artistic visions
+        </motion.h1>
+      </motion.main>
+    </motion.div>
   )
 }
 

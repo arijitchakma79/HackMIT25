@@ -12,6 +12,7 @@
   background-position: center;
   background-repeat: no-repeat;
   font-family: Arial, sans-serif;
+  transition: all 0.3s ease;
 }
 
 .header {
@@ -22,10 +23,25 @@
   background-color: transparent;
 }
 
+@media (max-width: 768px) {
+  .header {
+    padding: 15px 20px;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
 .title {
   font-size: 18px;
   color: #333;
   font-weight: normal;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 16px;
+  }
 }
 
 .header-right {
@@ -42,6 +58,12 @@
   cursor: pointer;
 }
 
+@media (max-width: 768px) {
+  .login-text {
+    font-size: 16px;
+  }
+}
+
 .login-button {
   width: 40px;
   height: 40px;
@@ -49,10 +71,37 @@
   background-color: #ff4444;
   border: none;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255, 68, 68, 0.3);
 }
 
-.login-button:hover {
-  background-color: #ff3333;
+@media (max-width: 768px) {
+  .login-button {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+.button-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.home-button {
+  font-size: 16px;
+  color: #333;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+@media (max-width: 768px) {
+  .home-button {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
 }
 
 .main-content {
@@ -60,35 +109,57 @@
   justify-content: center;
   align-items: center;
   height: calc(100vh - 80px);
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    height: calc(100vh - 120px);
+    padding: 0 20px;
+  }
 }
 
 .slogan {
   font-size: 48px;
   color: #333;
-  font-weight: normal;
-  text-align: center;
-}
-
-.slogan {
+  font-weight: 300;
+  line-height: 1.2;
+  max-width: 800px;
+  cursor: default;
+  background: linear-gradient(45deg, #333, #ff4444, #333);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 4s ease-in-out infinite;
   font-family: "Host Grotesk", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 300;
   font-style: italic;
 }
 
-.home-button {
-  background: none;
-  border: none;
-  font-size: 18px;
-  color: #333;
-  cursor: pointer;
-  padding: 8px 16px;
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
-.home-button:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
+@media (max-width: 768px) {
+  .slogan {
+    font-size: 32px;
+    max-width: 90%;
+  }
 }
+
+@media (max-width: 480px) {
+  .slogan {
+    font-size: 24px;
+    line-height: 1.3;
+  }
+}
+
 
 /* Profile Page Styles */
 .profile-content {
