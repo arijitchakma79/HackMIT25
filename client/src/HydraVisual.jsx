@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 const HydraVisual = ({ 
   width = 600, 
   height = 600,
-  userParams = { blur: 50, pixelate: 30, color: 180, invert: 0 }
+  userParams = { blur: 50, pixelate: 30, brightness: 50, invert: 0 }
 }) => {
   const canvasRef = useRef(null);
   const hydraRef = useRef(null);
@@ -54,7 +54,7 @@ const HydraVisual = ({
               // Execute the visualization code with dynamic parameters
               const pixelateValue = userParams.pixelate; // 0 to 100
               const blurAmount = userParams.blur / 100; // 0 to 1.0
-              const colorHue = userParams.color; // 0 to 360
+              const brightnessValue = userParams.brightness; // 0 to 100
               const invertValue = userParams.invert; // 0 to 100
               
               let visualization = osc(100,-0.0018,0.17).diff(osc(20,0.00008).rotate(Math.PI/0.00003))
@@ -64,6 +64,10 @@ const HydraVisual = ({
                 .modulateScale(osc(2),-0.2, 2, 1, 0.3)
                 .posterize(200) .rotate(1, 0.2, 0.01, 0.001)
                 .color(22, -2, 0.5, 0.5, 0.0001,  0.1, 0.2, 8).contrast(0.18, 0.3, 0.1, 0.2, 0.03, 1).brightness(0.0001, -1, 10);
+              
+              // Apply brightness adjustment (0 = very dark, 50 = normal, 100 = very bright)
+              const brightnessAdjust = (brightnessValue - 50) / 50; // -1 to 1 range
+              visualization = visualization.brightness(brightnessAdjust);
               
               // Only apply pixelate if value > 0
               if (pixelateValue > 0) {
@@ -164,7 +168,7 @@ const HydraVisual = ({
         // Execute the visualization code with dynamic parameters
         const pixelateValue = userParams.pixelate; // 0 to 100
         const blurAmount = userParams.blur / 100; // 0 to 1.0
-        const colorHue = userParams.color; // 0 to 360
+        const brightnessValue = userParams.brightness; // 0 to 100
         const invertValue = userParams.invert; // 0 to 100
         
         let visualization = osc(100,-0.0018,0.17).diff(osc(20,0.00008).rotate(Math.PI/0.00003))
@@ -174,6 +178,10 @@ const HydraVisual = ({
           .modulateScale(osc(2),-0.2, 2, 1, 0.3)
           .posterize(200) .rotate(1, 0.2, 0.01, 0.001)
           .color(22, -2, 0.5, 0.5, 0.0001,  0.1, 0.2, 8).contrast(0.18, 0.3, 0.1, 0.2, 0.03, 1).brightness(0.0001, -1, 10);
+        
+        // Apply brightness adjustment (0 = very dark, 50 = normal, 100 = very bright)
+        const brightnessAdjust = (brightnessValue - 50) / 50; // -1 to 1 range
+        visualization = visualization.brightness(brightnessAdjust);
         
         // Only apply pixelate if value > 0
         if (pixelateValue > 0) {

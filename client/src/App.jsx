@@ -27,13 +27,13 @@ function App() {
   const parameterNames = [
     'Dreamscape (blur)', 
     'Pixelverse (pixelate)', 
-    'Spectrum (color)', 
+    'Luminance (brightness)', 
     'Inversion (invert)'
   ]
 
   const [currentScreen, setCurrentScreen] = useState('home') // 'home', 'main', 'parameters', 'profile'
   // Sliders state for parameters screen
-  const [sliderValues, setSliderValues] = useState([50, 30, 180, 0]); // Set invert default to 0
+  const [sliderValues, setSliderValues] = useState([50, 30, 50, 0]); // Set brightness default to 50 (neutral)
   // Text input state for main screen
   const [vibeText, setVibeText] = useState('');
   // Audio playback state
@@ -300,7 +300,7 @@ function App() {
               userParams={{
                 blur: sliderValues[0],
                 pixelate: sliderValues[1],
-                color: sliderValues[2],
+                brightness: sliderValues[2],
                 invert: sliderValues[3]
               }}
             />
