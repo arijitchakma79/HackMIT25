@@ -69,164 +69,6 @@
   text-align: center;
 }
 
-.slogan {
-  font-family: "Host Grotesk", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 300;
-  font-style: italic;
-}
-
-.home-button {
-  background: none;
-  border: none;
-  font-size: 18px;
-  color: #333;
-  cursor: pointer;
-  padding: 8px 16px;
-}
-
-.home-button:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-}
-
-/* Profile Page Styles */
-.profile-content {
-  padding: 40px;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.profile-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 40px;
-  margin-bottom: 60px;
-}
-
-.profile-picture {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background-color: #ff4444;
-  flex-shrink: 0;
-}
-
-.profile-info {
-  flex: 1;
-  padding-top: 20px;
-}
-
-.profile-name {
-  font-size: 32px;
-  color: #333;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.profile-bio {
-  font-size: 20px;
-  color: #333;
-  margin: 0;
-}
-
-.saved-songs-section {
-  width: 100%;
-}
-
-.saved-songs-title {
-  font-size: 24px;
-  color: #333;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.songs-list {
-  border: 2px solid #333;
-  border-radius: 4px;
-}
-
-.song-item {
-  padding: 15px 20px;
-  font-size: 18px;
-  color: #333;
-  border-bottom: 1px solid #333;
-  background-color: transparent;
-}
-
-.song-item:last-child {
-  border-bottom: none;
-}
-
-/* Main Screen Styles */
-.main-screen {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: calc(100vh - 80px);
-  padding: 40px;
-}
-
-.vibe-input-container {
-  width: 500px;
-  background-color: #e57373;
-  border-radius: 8px;
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.vibe-input {
-  width: 100%;
-  padding: 15px;
-  font-size: 16px;
-  border: none;
-  border-radius: 4px;
-  background-color: #d3d3d3;
-  color: #333;
-  outline: none;
-}
-
-.vibe-input::placeholder {
-  color: #666;
-}
-
-.button-row {
-  display: flex;
-  gap: 15px;
-}
-
-.add-vocals-btn {
-  background-color: #333;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-  flex: 1;
-}
-
-.add-vocals-btn:hover {
-  background-color: #555;
-}
-
-.visualize-btn {
-  background-color: white;
-  color: #333;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-  flex: 1;
-}
-
-.visualize-btn:hover {
-  background-color: #f0f0f0;
-}
-
 /* Login Screen Styles */
 .logout-button {
   width: 40px;
@@ -239,6 +81,165 @@
 
 .logout-button:hover {
   background-color: #ff3333;
+}
+
+.login-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 80px);
+  padding: 40px;
+}
+
+.message-title {
+  font-size: 24px;
+  color: #333;
+  font-weight: normal;
+  margin-bottom: 40px;
+}
+
+.voice-input-area {
+  width: 500px;
+  height: 150px;
+  background-color: #e57373;
+  border-radius: 8px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.input-voice-btn {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.input-voice-btn:hover {
+  background-color: #555;
+}
+
+.voice-control-btn {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Parameters Screen Styles */
+.parameters-app {
+  background-image: none;
+  background-color: #d3d3d3;
+}
+
+.parameters-screen {
+  display: flex;
+  height: calc(100vh - 80px);
+}
+
+.left-panel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f8bbd9, #e57373, #ffab91);
+}
+
+.splash-image {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  display: block;
+}
+
+.right-panel {
+  flex: 1;
+  background-color: #d3d3d3;
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.parameters-title {
+  font-size: 24px;
+  color: #333;
+  font-weight: normal;
+  margin-bottom: 40px;
+}
+
+.parameters-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.parameter-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.param-label {
+  font-size: 18px;
+  color: #333;
+  min-width: 80px;
+}
+
+.slider-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.param-slider {
+  flex: 1;
+  height: 6px;
+  background: #999;
+  outline: none;
+  border-radius: 3px;
+  -webkit-appearance: none;
+}
+
+.param-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ff4444;
+  cursor: pointer;
+}
+
+.param-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ff4444;
+  cursor: pointer;
+  border: none;
+}
+
+.param-value {
+  font-size: 16px;
+  color: #333;
+  min-width: 40px;
+}
+
+.slogan {
+  font-family: "Host Grotesk", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: italic;
 }
 
 .login-screen {
