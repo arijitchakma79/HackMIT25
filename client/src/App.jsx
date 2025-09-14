@@ -9,6 +9,9 @@ function App() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState('')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [createError, setCreateError] = useState('')
 
   const handleLoginClick = () => {
     setShowLoginPopup(!showLoginPopup)
@@ -25,6 +28,18 @@ function App() {
     } else {
       setLoginError('Invalid username or password')
     }
+  }
+
+  const handleCreateAccount = (e) => {
+    e.preventDefault()
+    // For now, just simulate successful account creation
+    setCurrentScreen('main')
+    setShowLoginPopup(false)
+    setCreateError('')
+    setName('')
+    setEmail('')
+    setUsername('')
+    setPassword('')
   }
 
   const handleLogout = () => {
@@ -168,7 +183,46 @@ function App() {
                 
                 {activeTab === 'create' && (
                   <div className="tab-content">
-                    <p>Account creation coming soon...</p>
+                    <form onSubmit={handleCreateAccount}>
+                      <div className="form-group">
+                        <label>Name:</label>
+                        <input
+                          type="text"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Email:</label>
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Username:</label>
+                        <input
+                          type="text"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Password:</label>
+                        <input
+                          type="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                        />
+                      </div>
+                      {createError && <div className="error-message">{createError}</div>}
+                      <button type="submit" className="signin-btn">Create Account</button>
+                    </form>
                   </div>
                 )}
               </div>
