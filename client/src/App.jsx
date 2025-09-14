@@ -125,14 +125,14 @@ function App() {
               <div className="tab-container">
                 <div 
                   className={`tab ${activeTab === 'signin' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('signin')}
+                  onClick={() => setActiveTab(activeTab === 'signin' ? '' : 'signin')}
                 >
                   <span className="tab-arrow">▶</span>
                   <span>Sign In</span>
                 </div>
                 
                 {activeTab === 'signin' && (
-                  <div className="tab-content">
+                  <div className="tab-content signin-tab-content">
                     <form onSubmit={handleLogin}>
                       <div className="form-group">
                         <label>Username:</label>
@@ -160,7 +160,7 @@ function App() {
                 
                 <div 
                   className={`tab ${activeTab === 'create' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('create')}
+                  onClick={() => setActiveTab(activeTab === 'create' ? '' : 'create')}
                 >
                   <span className="tab-arrow">▶</span>
                   <span>Create An Account</span>

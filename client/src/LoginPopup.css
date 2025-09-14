@@ -6,13 +6,13 @@
 .login-popup {
   position: absolute;
   top: 100%;
-  right: 0;
+  right: -8px;
   width: 280px;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 1000;
-  margin-top: 8px;
+  margin: 16px 8px 0 8px;
 }
 
 .login-popup-header {
@@ -40,6 +40,7 @@
   color: #333;
   font-size: 14px;
   gap: 8px;
+  margin-bottom: 4px;
 }
 
 .tab:first-child {
@@ -50,6 +51,12 @@
 .tab:last-child {
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
+  margin-bottom: 0;
+}
+
+.tab:not(:last-child) .tab-content {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .tab.active {
@@ -70,6 +77,11 @@
   background-color: #e57373;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
+}
+
+.signin-tab-content {
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
 
 .form-group {
