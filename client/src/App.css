@@ -400,4 +400,22 @@
   font-style: italic;
 }
 
+.param-slider {
+  flex: 1;
+  height: 6px;
+  background: #999;
+  outline: none;
+  border-radius: 3px;
+  -webkit-appearance: none;
+  appearance: none;
+}
 
+.param-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ff4444;
+  cursor: pointer;
+}

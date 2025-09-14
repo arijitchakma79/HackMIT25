@@ -134,7 +134,7 @@ function App() {
             <input 
               type="text" 
               className="vibe-input" 
-              placeholder="Describe your vibe..."
+              placeholder="Describe your vision..."
               value={vibeText}
               onChange={(e) => setVibeText(e.target.value)}
             />
