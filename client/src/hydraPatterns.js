@@ -1,6 +1,50 @@
 // Collection of Hydra visual patterns
 // Each pattern is a function that takes userParams and returns a Hydra visualization chain
 
+// Seeded random number generator for consistent randomness
+class SeededRandom {
+  constructor(seed = 12345) {
+    this.seed = seed;
+  }
+  
+  // Linear congruential generator algorithm
+  next() {
+    this.seed = (this.seed * 1664525 + 1013904223) % (2 ** 32);
+    return this.seed / (2 ** 32);
+  }
+  
+  // Reset to original seed
+  reset(newSeed) {
+    this.seed = newSeed || 12345;
+  }
+  
+  // Random float between min and max
+  range(min, max) {
+    return min + this.next() * (max - min);
+  }
+  
+  // Random integer between min and max (inclusive)
+  int(min, max) {
+    return Math.floor(this.range(min, max + 1));
+  }
+  
+  // Random choice from array
+  choice(array) {
+    return array[this.int(0, array.length - 1)];
+  }
+}
+
+// Global seeded random instance
+let seededRandom = new SeededRandom();
+
+// Function to set the seed for consistent patterns
+export const setSeed = (seed) => {
+  seededRandom.reset(seed);
+};
+
+// Function to get seeded random (replacement for Math.random())
+export const getRandom = () => seededRandom.next();
+
 // Procedural color generation using color theory
 export const proceduralColorGenerator = {
   // Convert HSL to RGB for color generation
@@ -38,20 +82,20 @@ export const proceduralColorGenerator = {
   
   // Generate complementary colors (opposite on color wheel)
   generateComplementary: () => {
-    const baseHue = Math.random() * 360;
-    const saturation = 45 + Math.random() * 35; // 45-80%
-    const lightness = 55 + Math.random() * 30;  // Increased from 45-70% to 55-85%
+    const baseHue = getRandom() * 360;
+    const saturation = 45 + getRandom() * 35; // 45-80%
+    const lightness = 55 + getRandom() * 30;  // Increased from 45-70% to 55-85%
     
     return proceduralColorGenerator.hslToRgb(baseHue, saturation, lightness);
   },
   
   // Generate triadic colors (120° apart on color wheel)
   generateTriadic: () => {
-    const baseHue = Math.random() * 360;
-    const saturation = 40 + Math.random() * 35; // 40-75%
-    const lightness = 50 + Math.random() * 35;  // Increased from 40-70% to 50-85%
+    const baseHue = getRandom() * 360;
+    const saturation = 40 + getRandom() * 35; // 40-75%
+    const lightness = 50 + getRandom() * 35;  // Increased from 40-70% to 50-85%
     
-    const hueOffset = 120 + (Math.random() - 0.5) * 20; // 110-130°
+    const hueOffset = 120 + (getRandom() - 0.5) * 20; // 110-130°
     const secondHue = (baseHue + hueOffset) % 360;
     
     return proceduralColorGenerator.hslToRgb(secondHue, saturation, lightness);
@@ -59,12 +103,12 @@ export const proceduralColorGenerator = {
   
   // Generate analogous colors (adjacent on color wheel)
   generateAnalogous: () => {
-    const baseHue = Math.random() * 360;
-    const saturation = 35 + Math.random() * 40; // 35-75%
-    const lightness = 50 + Math.random() * 35;  // Increased from 35-75% to 50-85%
+    const baseHue = getRandom() * 360;
+    const saturation = 35 + getRandom() * 40; // 35-75%
+    const lightness = 50 + getRandom() * 35;  // Increased from 35-75% to 50-85%
     
-    const hueOffset = 15 + Math.random() * 45; // 15-60°
-    const direction = Math.random() > 0.5 ? 1 : -1;
+    const hueOffset = 15 + getRandom() * 45; // 15-60°
+    const direction = getRandom() > 0.5 ? 1 : -1;
     const analogousHue = (baseHue + (hueOffset * direction) + 360) % 360;
     
     return proceduralColorGenerator.hslToRgb(analogousHue, saturation, lightness);
@@ -72,12 +116,12 @@ export const proceduralColorGenerator = {
   
   // Generate tetradic colors (rectangle on color wheel)
   generateTetradic: () => {
-    const baseHue = Math.random() * 360;
-    const saturation = 45 + Math.random() * 30; // 45-75%
-    const lightness = 55 + Math.random() * 30;  // Increased from 40-70% to 55-85%
+    const baseHue = getRandom() * 360;
+    const saturation = 45 + getRandom() * 30; // 45-75%
+    const lightness = 55 + getRandom() * 30;  // Increased from 40-70% to 55-85%
     
-    const offset1 = 60 + Math.random() * 30;  // 60-90°
-    const offset2 = 180 + Math.random() * 20; // 180-200°
+    const offset1 = 60 + getRandom() * 30;  // 60-90°
+    const offset2 = 180 + getRandom() * 20; // 180-200°
     const hueVariant = (baseHue + offset1 + offset2) % 360;
     
     return proceduralColorGenerator.hslToRgb(hueVariant, saturation, lightness);
@@ -85,20 +129,20 @@ export const proceduralColorGenerator = {
   
   // Generate monochromatic variations (same hue, different saturation/lightness)
   generateMonochromatic: () => {
-    const baseHue = Math.random() * 360;
-    const saturation = 25 + Math.random() * 50; // 25-75%
-    const lightness = 50 + Math.random() * 35;  // Increased from 35-75% to 50-85%
+    const baseHue = getRandom() * 360;
+    const saturation = 25 + getRandom() * 50; // 25-75%
+    const lightness = 50 + getRandom() * 35;  // Increased from 35-75% to 50-85%
     
     return proceduralColorGenerator.hslToRgb(baseHue, saturation, lightness);
   },
   
   // Generate split-complementary colors
   generateSplitComplementary: () => {
-    const baseHue = Math.random() * 360;
-    const saturation = 40 + Math.random() * 35; // 40-75%
-    const lightness = 50 + Math.random() * 35;  // Increased from 40-70% to 50-85%
+    const baseHue = getRandom() * 360;
+    const saturation = 40 + getRandom() * 35; // 40-75%
+    const lightness = 50 + getRandom() * 35;  // Increased from 40-70% to 50-85%
     
-    const splitAngle = 150 + Math.random() * 60; // 150-210°
+    const splitAngle = 150 + getRandom() * 60; // 150-210°
     const splitHue = (baseHue + splitAngle) % 360;
     
     return proceduralColorGenerator.hslToRgb(splitHue, saturation, lightness);
@@ -151,7 +195,7 @@ export const getRandomColors = () => {
     proceduralColorGenerator.generateSplitComplementary
   ];
   
-  const randomScheme = colorSchemes[Math.floor(Math.random() * colorSchemes.length)];
+  const randomScheme = colorSchemes[Math.floor(getRandom() * colorSchemes.length)];
   const generatedColor = randomScheme();
   
   // Apply contrast enhancement to avoid extreme colors
@@ -173,32 +217,32 @@ export const getRandomColorPalette = () => {
 export const proceduralGenerator = {
   // Random parameter generators influenced by user parameters
   randomOscParams: (userParams = {}) => {
-    const baseFreq = Math.random() * 100 + 1;
+    const baseFreq = getRandom() * 100 + 1;
     // Higher pixelate values favor higher frequencies for more detail
     const pixelateInfluence = (userParams.pixelate || 0) / 100;
     const freq = baseFreq + (pixelateInfluence * 50); // 1-151 range
     
     return {
       freq: freq,
-      sync: (Math.random() - 0.5) * 0.3,  // Increased from 0.1 to 0.3 for more movement
-      offset: Math.random() * 4            // Increased from 2 to 4 for more dynamic offset
+      sync: (getRandom() - 0.5) * 0.3,  // Increased from 0.1 to 0.3 for more movement
+      offset: getRandom() * 4            // Increased from 2 to 4 for more dynamic offset
     };
   },
   
   randomNoiseParams: (userParams = {}) => {
-    const baseScale = Math.random() * 10 + 0.5;
+    const baseScale = getRandom() * 10 + 0.5;
     // Brightness affects noise scale - dimmer = finer noise
     const brightnessInfluence = (userParams.brightness || 50) / 100;
     const scale = baseScale * (0.5 + brightnessInfluence); // More brightness = larger noise
     
     return {
       scale: scale,
-      offset: Math.random() * 1.5  // Increased from 0.5 to 1.5 for more movement
+      offset: getRandom() * 1.5  // Increased from 0.5 to 1.5 for more movement
     };
   },
   
   randomModulateParams: (userParams = {}) => {
-    const baseAmount = Math.random() * 0.8 + 0.2; // Increased base range for more modulation
+    const baseAmount = getRandom() * 0.8 + 0.2; // Increased base range for more modulation
     // Invert parameter affects modulation intensity
     const invertInfluence = (userParams.invert || 0) / 100;
     const amount = baseAmount + (invertInfluence * 0.5); // Increased influence for more movement
@@ -213,7 +257,7 @@ export const proceduralGenerator = {
     const invertInfluence = (userParams.invert || 0) / 100;
     
     // More conservative color multiplication to avoid extremes but ensure brightness
-    const colorMultiplier = Math.random() * 1.0 + 0.8; // 0.8-1.8 for brighter baseline
+    const colorMultiplier = getRandom() * 1.0 + 0.8; // 0.8-1.8 for brighter baseline
     
     return {
       r: colors.r * colorMultiplier * (0.8 + brightnessInfluence * 0.4), // Increased baseline from 0.6 to 0.8
@@ -224,7 +268,7 @@ export const proceduralGenerator = {
   
   // Pattern building blocks influenced by user parameters
   generateSource: (colors, userParams = {}) => {
-    const choice = Math.random();
+    const choice = getRandom();
     const oscParams = proceduralGenerator.randomOscParams(userParams);
     const noiseParams = proceduralGenerator.randomNoiseParams(userParams);
     
@@ -238,25 +282,25 @@ export const proceduralGenerator = {
       return `noise(${noiseParams.scale.toFixed(2)}, ${noiseParams.offset.toFixed(2)})`;
     } else if (choice < 0.75) {
       // Enhanced voronoi with more dynamic parameters
-      const scale = (Math.random() * 15 + 2).toFixed(2); // Increased from 10+1 to 15+2
-      const speed = (Math.random() * 1.5 + 0.1).toFixed(2); // Increased speed range
-      const blending = (Math.random() * 3).toFixed(2); // Increased blending range
+      const scale = (getRandom() * 15 + 2).toFixed(2); // Increased from 10+1 to 15+2
+      const speed = (getRandom() * 1.5 + 0.1).toFixed(2); // Increased speed range
+      const blending = (getRandom() * 3).toFixed(2); // Increased blending range
       return `voronoi(${scale}, ${speed}, ${blending})`;
     } else if (choice < (0.85 + geometricBias)) {
       // Higher frequency shape generation - increased radius and frequency ranges
-      const sides = Math.floor(Math.random() * 12) + 3; // 3-14 sides for more variety
-      const radius = (Math.random() * 1.5 + 0.2).toFixed(3); // 0.2-1.7 range for bigger shapes
-      const smoothness = (Math.random() * 0.8 + 0.1).toFixed(3); // 0.1-0.9 range for more variation
+      const sides = Math.floor(getRandom() * 12) + 3; // 3-14 sides for more variety
+      const radius = (getRandom() * 1.5 + 0.2).toFixed(3); // 0.2-1.7 range for bigger shapes
+      const smoothness = (getRandom() * 0.8 + 0.1).toFixed(3); // 0.1-0.9 range for more variation
       return `shape(${sides}, ${radius}, ${smoothness})`;
     } else if (choice < 0.95) {
-      return `gradient(${(Math.random()).toFixed(2)})`;
+      return `gradient(${(getRandom()).toFixed(2)})`;
     } else {
       return `solid(${colors.r.toFixed(2)}, ${colors.g.toFixed(2)}, ${colors.b.toFixed(2)})`;
     }
   },
   
   generateModulation: (userParams = {}) => {
-    const choice = Math.random();
+    const choice = getRandom();
     const modulateParams = proceduralGenerator.randomModulateParams(userParams);
     const amount = modulateParams.amount.toFixed(3);
     
@@ -270,54 +314,54 @@ export const proceduralGenerator = {
       const params = proceduralGenerator.randomNoiseParams(userParams);
       return `.modulate(noise(${params.scale.toFixed(1)}), ${amount})`;
     } else if (choice < 0.45) {
-      return `.modulateScale(osc(${(Math.random() * 30 + 2).toFixed(1)}), ${amount})`; // Increased frequency
+      return `.modulateScale(osc(${(getRandom() * 30 + 2).toFixed(1)}), ${amount})`; // Increased frequency
     } else if (choice < 0.6) {
-      return `.modulateRotate(osc(${(Math.random() * 20 + 1).toFixed(1)}), ${amount})`; // Increased frequency
+      return `.modulateRotate(osc(${(getRandom() * 20 + 1).toFixed(1)}), ${amount})`; // Increased frequency
     } else if (choice < 0.75) {
-      return `.modulateScrollX(osc(${(Math.random() * 15 + 1).toFixed(1)}), ${amount})`; // Increased frequency
+      return `.modulateScrollX(osc(${(getRandom() * 15 + 1).toFixed(1)}), ${amount})`; // Increased frequency
     } else if (choice < 0.9) {
-      return `.modulateScrollY(osc(${(Math.random() * 15 + 1).toFixed(1)}), ${amount})`; // Added Y scrolling
+      return `.modulateScrollY(osc(${(getRandom() * 15 + 1).toFixed(1)}), ${amount})`; // Added Y scrolling
     } else {
-      return `.modulateHue(osc(${(Math.random() * 10 + 0.5).toFixed(1)}), ${amount})`; // Added hue modulation
+      return `.modulateHue(osc(${(getRandom() * 10 + 0.5).toFixed(1)}), ${amount})`; // Added hue modulation
     }
   },
   
   generateGeometry: (userParams = {}) => {
-    const choice = Math.random();
+    const choice = getRandom();
     const pixelateInfluence = (userParams.pixelate || 0) / 100;
     const brightnessInfluence = (userParams.brightness || 50) / 100;
     
     // Pixelate parameter influences geometric transformation preferences
     if (choice < (0.15 + pixelateInfluence * 0.2)) {
-      const sides = Math.floor(Math.random() * 10) + 3; // 3-12 sides
+      const sides = Math.floor(getRandom() * 10) + 3; // 3-12 sides
       return `.kaleid(${sides})`;
     } else if (choice < 0.3) {
-      const amount = (Math.random() * 2 + 0.3).toFixed(2);
+      const amount = (getRandom() * 2 + 0.3).toFixed(2);
       return `.scale(${amount})`;
     } else if (choice < (0.45 + brightnessInfluence * 0.1)) {
-      const speed = (Math.random() * 0.8 + 0.02).toFixed(4); // Increased rotation speed significantly
+      const speed = (getRandom() * 0.8 + 0.02).toFixed(4); // Increased rotation speed significantly
       return `.rotate(${speed})`;
     } else if (choice < 0.6) {
-      const amount = Math.floor(Math.random() * 30) + 3; // 3-32
+      const amount = Math.floor(getRandom() * 30) + 3; // 3-32
       return `.posterize(${amount})`;
     } else if (choice < (0.75 + pixelateInfluence * 0.15)) {
       // More likely to add pixelate when user has high pixelate value
-      const amount = Math.floor(Math.random() * 8) + 2; // 2-9
+      const amount = Math.floor(getRandom() * 8) + 2; // 2-9
       return `.pixelate(${amount}, ${amount})`;
     } else if (choice < 0.85) {
-      const repeatX = Math.floor(Math.random() * 4) + 1; // 1-4
-      const repeatY = Math.floor(Math.random() * 4) + 1; // 1-4
+      const repeatX = Math.floor(getRandom() * 4) + 1; // 1-4
+      const repeatY = Math.floor(getRandom() * 4) + 1; // 1-4
       return `.repeat(${repeatX}, ${repeatY})`;
     } else if (choice < 0.95) {
       return `.invert()`;
     } else {
-      const threshold = (Math.random() * 0.8 + 0.1).toFixed(2);
+      const threshold = (getRandom() * 0.8 + 0.1).toFixed(2);
       return `.thresh(${threshold})`;
     }
   },
   
   generateBlending: (colors, userParams = {}) => {
-    const choice = Math.random();
+    const choice = getRandom();
     const invertInfluence = (userParams.invert || 0) / 100;
     
     // Higher invert values favor more complex blending
@@ -362,21 +406,21 @@ export const proceduralGenerator = {
     
     // Add modulations
     for (let i = 0; i < scaledLevel.modulations; i++) {
-      if (Math.random() < (0.7 + invertInfluence * 0.2)) {
+      if (getRandom() < (0.7 + invertInfluence * 0.2)) {
         pattern += proceduralGenerator.generateModulation(userParams);
       }
     }
     
     // Add blending operations
     for (let i = 0; i < scaledLevel.blendings; i++) {
-      if (Math.random() < (0.5 + invertInfluence * 0.3)) {
+      if (getRandom() < (0.5 + invertInfluence * 0.3)) {
         pattern += proceduralGenerator.generateBlending(colors, userParams);
       }
     }
     
     // Add geometric transformations
     for (let i = 0; i < scaledLevel.geometries; i++) {
-      if (Math.random() < (0.8 + pixelateInfluence * 0.15)) {
+      if (getRandom() < (0.8 + pixelateInfluence * 0.15)) {
         pattern += proceduralGenerator.generateGeometry(userParams);
       }
     }
@@ -393,7 +437,7 @@ export const proceduralGenerator = {
 export const getRandomPattern = (userParams = { pixelate: 0, brightness: 50, invert: 5 }) => {
   // Always generate a new procedural pattern influenced by user parameters
   const complexities = ['simple', 'medium', 'complex'];
-  const randomComplexity = complexities[Math.floor(Math.random() * complexities.length)];
+  const randomComplexity = complexities[Math.floor(getRandom() * complexities.length)];
   return generateProceduralPattern(randomComplexity, userParams);
 };
 
@@ -429,35 +473,35 @@ export const generateProceduralPattern = (complexity = 'medium', userParams = { 
     
     // Add modulations
     for (let i = 0; i < scaledLevel.modulations; i++) {
-      if (Math.random() < (0.8 + invertInfluence * 0.15)) {
+      if (getRandom() < (0.8 + invertInfluence * 0.15)) {
         pattern += proceduralGenerator.generateModulation(userParams);
       }
     }
     
     // Add blending operations
     for (let i = 0; i < scaledLevel.blendings; i++) {
-      if (Math.random() < (0.6 + invertInfluence * 0.2)) {
+      if (getRandom() < (0.6 + invertInfluence * 0.2)) {
         pattern += proceduralGenerator.generateBlending(colors, userParams);
       }
     }
     
     // Add geometric transformations
     for (let i = 0; i < scaledLevel.geometries; i++) {
-      if (Math.random() < (0.8 + pixelateInfluence * 0.15)) {
+      if (getRandom() < (0.8 + pixelateInfluence * 0.15)) {
         pattern += proceduralGenerator.generateGeometry(userParams);
       }
     }
     
     // Add special effects influenced by user parameters
     for (let i = 0; i < scaledLevel.effects; i++) {
-      if (Math.random() < 0.6) {
+      if (getRandom() < 0.6) {
         const effects = [
-          `.contrast(${(Math.random() * 2 + 0.5 + brightnessInfluence).toFixed(2)})`,
-          `.brightness(${((Math.random() * 0.4 - 0.2) * brightnessInfluence).toFixed(3)})`,
-          `.saturate(${(Math.random() * 2 + 0.5 + invertInfluence).toFixed(2)})`,
-          `.hue(${(Math.random() * 0.5 * invertInfluence).toFixed(3)})`
+          `.contrast(${(getRandom() * 2 + 0.5 + brightnessInfluence).toFixed(2)})`,
+          `.brightness(${((getRandom() * 0.4 - 0.2) * brightnessInfluence).toFixed(3)})`,
+          `.saturate(${(getRandom() * 2 + 0.5 + invertInfluence).toFixed(2)})`,
+          `.hue(${(getRandom() * 0.5 * invertInfluence).toFixed(3)})`
         ];
-        pattern += effects[Math.floor(Math.random() * effects.length)];
+        pattern += effects[Math.floor(getRandom() * effects.length)];
       }
     }
     
