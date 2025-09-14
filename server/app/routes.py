@@ -10,6 +10,7 @@ suna = Blueprint("suna", __name__)
 def generate():
     data = request.get_json()
     try:
+        print(f"Received request data: {data}")
         res = generate_song(
             topic=data.get("topic"),
             tags=data.get("tags"),
@@ -17,6 +18,7 @@ def generate():
             make_instrumental=data.get("make_instrumental", False),
             cover_clip_id=data.get("cover_clip_id")
         )
+        print(f"Generated song response: {res}")
         clip_id = res["id"]
         clip = poll_until_complete(clip_id)
         return jsonify({
@@ -25,6 +27,10 @@ def generate():
             "audio_url": clip.get("audio_url")
         })
     except Exception as e:
+        print(f"Error in generate route: {str(e)}")
+        print(f"Error type: {type(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
 
