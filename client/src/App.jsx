@@ -13,6 +13,7 @@ function App() {
   const [email, setEmail] = useState('')
   const [createError, setCreateError] = useState('')
   const [sliderValues, setSliderValues] = useState([95, 95, 95, 95])
+  const [editingIndex, setEditingIndex] = useState(null)
 
   const handleLoginClick = () => {
     setShowLoginPopup(!showLoginPopup)
@@ -58,6 +59,25 @@ function App() {
     setSliderValues(newValues)
   }
 
+  const handleValueClick = (index) => {
+    setEditingIndex(index)
+  }
+
+  const handleValueChange = (index, value) => {
+    const numValue = Math.max(0, Math.min(100, parseInt(value) || 0))
+    handleSliderChange(index, numValue)
+  }
+
+  const handleValueBlur = () => {
+    setEditingIndex(null)
+  }
+
+  const handleValueKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      setEditingIndex(null)
+    }
+  }
+
   if (currentScreen === 'parameters') {
     return (
       <div className="app parameters-app">
@@ -87,7 +107,18 @@ function App() {
                       value={value} 
                       onChange={(e) => handleSliderChange(index, e.target.value)}
                     />
-                    <span className="param-value">{value}%</span>
+                    {editingIndex === index ? (
+                      <input 
+                        type="number" 
+                        className="param-value-edit" 
+                        value={value} 
+                        onChange={(e) => handleValueChange(index, e.target.value)} 
+                        onBlur={handleValueBlur} 
+                        onKeyPress={handleValueKeyPress}
+                      />
+                    ) : (
+                      <span className="param-value" onClick={() => handleValueClick(index)}>{value}%</span>
+                    )}
                   </div>
                 </div>
               ))}

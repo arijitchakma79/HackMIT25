@@ -124,3 +124,27 @@
   font-size: 12px;
   margin-top: 4px;
 }
+
+.param-value {
+  font-size: 16px;
+  color: #333;
+  min-width: 40px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.param-value:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 2px;
+}
+
+.param-value-edit {
+  width: 50px;
+  padding: 2px 4px;
+  border: 1px solid #666;
+  border-radius: 2px;
+  font-size: 16px;
+  text-align: center;
+  background-color: white;
+  color: #333;
+}
