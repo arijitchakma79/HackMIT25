@@ -14,6 +14,7 @@ function App() {
   const [createError, setCreateError] = useState('')
   const [sliderValues, setSliderValues] = useState([95, 95, 95, 95])
   const [editingIndex, setEditingIndex] = useState(null)
+  const parameterNames = ['Kalied', 'Pixelate', 'Modulate', 'param 4']
 
   const handleLoginClick = () => {
     setShowLoginPopup(!showLoginPopup)
@@ -97,7 +98,7 @@ function App() {
             <div className="parameters-list">
               {sliderValues.map((value, index) => (
                 <div className="parameter-item" key={index}>
-                  <span className="param-label">Param</span>
+                  <span className="param-label">{parameterNames[index]}</span>
                   <div className="slider-container">
                     <input 
                       type="range" 
