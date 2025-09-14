@@ -4,6 +4,7 @@ import './LoginPopup.css'
 import './SavedSong.css'
 import HydraVisual from './HydraVisual.jsx'
 import VoiceInput from './components/VoiceInput'
+import DJChat from './components/DJChat'
 
 // Helper function to format time in MM:SS format
 const formatTime = (timeInSeconds) => {
@@ -283,6 +284,50 @@ function App() {
     setVibeText(transcript)
   }
 
+  const handleDJMusicPrompt = async (prompt) => {
+    if (!prompt.trim()) {
+      alert('DJ needs a better description to work with!');
+      return;
+    }
+
+    setVibeText(prompt); // Store the prompt for display
+    setIsLoading(true);
+    setAudioUrl(null);
+    
+    try {
+      const response = await fetch('http://localhost:5001/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: prompt
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      
+      if (result.audio_url) {
+        setAudioUrl(result.audio_url);
+        setCurrentScreen('parameters'); // Navigate to parameters page after generating music
+        // Save song data to sessionStorage for persistence across navigation
+        saveSongToSession(result.audio_url, prompt, sliderValues);
+      } else {
+        throw new Error('No audio URL returned from server');
+      }
+    } catch (error) {
+      console.error('Error generating music:', error);
+      console.error('Error details:', error.message);
+      alert(`Failed to generate music: ${error.message}. Please try again.`);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   if (currentScreen === 'parameters') {
     console.log('Rendering parameters screen with audioUrl:', audioUrl, 'vibeText:', vibeText);
     return (
@@ -463,32 +508,15 @@ function App() {
 
         <main className="main-screen">
           <div className="vibe-input-container">
-            <VoiceInput 
-              onTranscriptChange={handleVoiceTranscript}
-              disabled={isLoading}
-              placeholder="Click to start voice input"
-            />
-            
-            <input 
-              type="text" 
-              className="vibe-input" 
-              placeholder="Describe your vision... or use voice input above"
-              value={vibeText}
-              onChange={(e) => setVibeText(e.target.value)}
+            <DJChat 
+              onMusicPrompt={handleDJMusicPrompt}
               disabled={isLoading}
             />
-            
-            <div className="button-row">
-              <button className="add-vocals-btn" onClick={handleAddVocals} disabled={isLoading}>Add vocals</button>
-              <button className="visualize-btn" onClick={handleVisualize} disabled={isLoading}>
-                {isLoading ? 'Generating...' : 'Visualize'}
-              </button>
-            </div>
             
             {isLoading && (
               <div className="loading-state">
                 <div className="loading-spinner"></div>
-                <p>Generating your music... This may take up to 2 minutes.</p>
+                <p>DJ Synthra is cooking up your track... This may take up to 2 minutes.</p>
               </div>
             )}
           </div>
