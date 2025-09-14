@@ -55,7 +55,7 @@ function App() {
     return (
       <div className="app parameters-app">
         <header className="header">
-          <div className="title">title</div>
+          <div className="title">Synthra</div>
           <div className="header-right">
             <button className="logout-button" onClick={handleLogout}></button>
           </div>
@@ -107,7 +107,7 @@ function App() {
     return (
       <div className="app">
         <header className="header">
-          <div className="title">title</div>
+          <div className="title">Synthra</div>
           <div className="header-right">
             <button className="logout-button" onClick={handleLogout}></button>
           </div>
@@ -127,7 +127,7 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <div className="title">title</div>
+        <div className="title">Synthra</div>
         <div className="header-right">
           <button className="login-text" onClick={handleLoginClick}>Login</button>
           <button className="login-button"></button>
