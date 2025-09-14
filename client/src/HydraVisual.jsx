@@ -1,6 +1,10 @@
 import { useEffect, useRef } from 'react';
 
-const HydraVisual = ({ width = 600, height = 600 }) => {
+const HydraVisual = ({ 
+  width = 600, 
+  height = 600,
+  userParams = { blur: 50, pixelate: 30, color: 180, kaleid: 40 }
+}) => {
   const canvasRef = useRef(null);
   const hydraRef = useRef(null);
   const debugCleanupRef = useRef(null);
@@ -47,15 +51,27 @@ const HydraVisual = ({ width = 600, height = 600 }) => {
               // Set up periodic cleanup for debug canvases
               debugCleanupRef.current = setInterval(hideDebugCanvases, 1000);
               
-              // Execute the visualization code - cleaned up version
-              osc(100,-0.0018,0.17).diff(osc(20,0.00008).rotate(Math.PI/0.00003))
+              // Execute the visualization code with dynamic parameters
+              const pixelateValue = userParams.pixelate; // 0 to 100
+              const blurAmount = userParams.blur / 100; // 0 to 1.0
+              const colorHue = userParams.color; // 0 to 360
+              const kaleidAmount = Math.floor(userParams.kaleid / 10) + 2; // 2 to 12
+              
+              let visualization = osc(100,-0.0018,0.17).diff(osc(20,0.00008).rotate(Math.PI/0.00003))
                 .modulateScale(noise(1.5,0.18).modulateScale(osc(13).rotate(()=>Math.sin(time/22))),3)
                 .color(11,0.5,0.4, 0.9, 0.2, 0.011, 5, 22,  0.5, -1).contrast(1.4)
                 .invert().brightness(0.0003, 2).contrast( 0.5, 2, 0.1, 2).color(4, -2, 0.1)
                 .modulateScale(osc(2),-0.2, 2, 1, 0.3)
                 .posterize(200) .rotate(1, 0.2, 0.01, 0.001)
-                .color(22, -2, 0.5, 0.5, 0.0001,  0.1, 0.2, 8).contrast(0.18, 0.3, 0.1, 0.2, 0.03, 1).brightness(0.0001, -1, 10)
-                .out();
+                .color(22, -2, 0.5, 0.5, 0.0001,  0.1, 0.2, 8).contrast(0.18, 0.3, 0.1, 0.2, 0.03, 1).brightness(0.0001, -1, 10);
+              
+              // Only apply pixelate if value > 0
+              if (pixelateValue > 0) {
+                const pixelateAmount = Math.max(1, Math.floor((101 - pixelateValue) / 2)); // 1 to 50
+                visualization = visualization.pixelate(pixelateAmount, pixelateAmount);
+              }
+              
+              visualization.out();
                 
               console.log('Hydra visualization initialized successfully');
             } catch (error) {
@@ -134,6 +150,37 @@ const HydraVisual = ({ width = 600, height = 600 }) => {
       }
     };
   }, [width, height]);
+
+  // Update visualization when parameters change
+  useEffect(() => {
+    if (hydraRef.current) {
+      try {
+        // Execute the visualization code with dynamic parameters
+        const pixelateValue = userParams.pixelate; // 0 to 100
+        const blurAmount = userParams.blur / 100; // 0 to 1.0
+        const colorHue = userParams.color; // 0 to 360
+        const kaleidAmount = Math.floor(userParams.kaleid / 10) + 2; // 2 to 12
+        
+        let visualization = osc(100,-0.0018,0.17).diff(osc(20,0.00008).rotate(Math.PI/0.00003))
+          .modulateScale(noise(1.5,0.18).modulateScale(osc(13).rotate(()=>Math.sin(time/22))),3)
+          .color(11,0.5,0.4, 0.9, 0.2, 0.011, 5, 22,  0.5, -1).contrast(1.4)
+          .invert().brightness(0.0003, 2).contrast( 0.5, 2, 0.1, 2).color(4, -2, 0.1)
+          .modulateScale(osc(2),-0.2, 2, 1, 0.3)
+          .posterize(200) .rotate(1, 0.2, 0.01, 0.001)
+          .color(22, -2, 0.5, 0.5, 0.0001,  0.1, 0.2, 8).contrast(0.18, 0.3, 0.1, 0.2, 0.03, 1).brightness(0.0001, -1, 10);
+        
+        // Only apply pixelate if value > 0
+        if (pixelateValue > 0) {
+          const pixelateAmount = Math.max(1, Math.floor((101 - pixelateValue) / 2)); // 1 to 50
+          visualization = visualization.pixelate(pixelateAmount, pixelateAmount);
+        }
+        
+        visualization.out();
+      } catch (error) {
+        console.error('Error updating visualization with parameters:', error);
+      }
+    }
+  }, [userParams]);
 
   return (
     <canvas

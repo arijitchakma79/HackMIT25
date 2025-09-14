@@ -289,7 +289,16 @@ function App() {
         
         <main className="parameters-screen">
           <div className="left-panel">
-            <HydraVisual width={600} height={600} />
+            <HydraVisual 
+              width={600} 
+              height={600} 
+              userParams={{
+                blur: sliderValues[0],
+                pixelate: sliderValues[1],
+                color: sliderValues[2],
+                kaleid: sliderValues[3]
+              }}
+            />
           </div>
           <div className="right-panel">
             <h2 className="parameters-title">Parameters</h2>
