@@ -37,15 +37,15 @@ npm run dev  # Runs on http://localhost:5173
 
 ## Features
 
-- **AI Music Generation**: Style-based instrumental music from text descriptions
-- **Real-time Visualizations**: Dynamic Hydra patterns with seizure-safe limits
+- **AI Music Generation**: Stylized instrumental music from text/speech descriptions
+- **Real-time Visualizations**: Procedurally generated Hydra patterns visuals
 - **AI DJ Chat**: Conversational interface with voice input/output
 - **Interactive Controls**: Adjust visual parameters (pixelation, brightness, invert)
 - **Smooth Animations**: Framer Motion-powered UI transitions
 
 ## Key Dependencies
 
-**Backend**: `flask`, `flask-cors`, `requests`, `python-dotenv`, `openai`  
+**Backend**: `flask`, `flask-cors`, `requests`, `python-dotenv`, `openai` 
 **Frontend**: `react`, `framer-motion`, `vite`, `hydra-synth`
 
 
