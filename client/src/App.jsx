@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import './LoginPopup.css'
+import VoiceInput from './components/VoiceInput'
 
 // Helper function to format time in MM:SS format
 const formatTime = (timeInSeconds) => {
@@ -152,6 +153,10 @@ function App() {
 
   const handleProfileClick = () => {
     setCurrentScreen('profile')
+  }
+
+  const handleVoiceTranscript = (transcript) => {
+    setVibeText(transcript)
   }
 
   if (currentScreen === 'parameters') {
@@ -320,10 +325,16 @@ function App() {
 
         <main className="main-screen">
           <div className="vibe-input-container">
+            <VoiceInput 
+              onTranscriptChange={handleVoiceTranscript}
+              disabled={isLoading}
+              placeholder="Click to start voice input"
+            />
+            
             <input 
               type="text" 
               className="vibe-input" 
-              placeholder="Describe your vision..."
+              placeholder="Describe your vision... or use voice input above"
               value={vibeText}
               onChange={(e) => setVibeText(e.target.value)}
               disabled={isLoading}
