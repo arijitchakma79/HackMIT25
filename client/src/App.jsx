@@ -433,26 +433,6 @@ function App() {
             animate="in"
             transition={{ delay: 0.5, duration: 0.7 }}
           >
-            <motion.div 
-              className="seizure-warning"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 0.7, y: 0 }}
-              transition={{ delay: 1, duration: 0.5 }}
-              style={{
-                position: 'absolute',
-                top: '10px',
-                left: '10px',
-                background: 'rgba(0,0,0,0.7)',
-                color: '#fff',
-                padding: '5px 10px',
-                borderRadius: '4px',
-                fontSize: '12px',
-                zIndex: 1000,
-                maxWidth: '200px'
-              }}
-            >
-              ⚠️ Seizure-safe patterns enabled
-            </motion.div>
             <HydraVisual 
               width={600} 
               height={600} 

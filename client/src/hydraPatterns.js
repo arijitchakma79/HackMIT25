@@ -630,7 +630,12 @@ export const applyUserParameters = (visualization, userParams) => {
   visualization = visualization.color(brightnessMultiplier, brightnessMultiplier, brightnessMultiplier);
   
   if (userParams.pixelate > 0) {
-    const pixelateAmount = Math.max(1, Math.floor((101 - userParams.pixelate) / 2)); // 1 to 50
+    // More gradual pixelation scaling
+    // At 0%: no pixelation
+    // At 20%: pixelateAmount = 100 (very subtle)
+    // At 50%: pixelateAmount = 50 (moderate)
+    // At 100%: pixelateAmount = 5 (very pixelated)
+    const pixelateAmount = Math.max(5, Math.floor(200 - (userParams.pixelate * 1.95)));
     visualization = visualization.pixelate(pixelateAmount, pixelateAmount);
   }
   
