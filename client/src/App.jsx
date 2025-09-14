@@ -11,8 +11,7 @@ const formatTime = (timeInSeconds) => {
 };
 
 function App() {
-<<<<<<< HEAD
-  const [currentScreen, setCurrentScreen] = useState('home') // 'home', 'main', 'parameters'
+
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [activeTab, setActiveTab] = useState('signin') // 'signin' or 'create'
   const [username, setUsername] = useState('')
@@ -21,10 +20,9 @@ function App() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [createError, setCreateError] = useState('')
-  const [sliderValues, setSliderValues] = useState([95, 95, 95, 95])
   const [editingIndex, setEditingIndex] = useState(null)
   const parameterNames = ['Kalied', 'Pixelate', 'Modulate', 'param 4']
-=======
+
   const [currentScreen, setCurrentScreen] = useState('home') // 'home', 'main', 'parameters', 'profile'
   // Sliders state for parameters screen
   const [sliderValues, setSliderValues] = useState([95, 95, 95, 95]);
@@ -36,7 +34,7 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
->>>>>>> getAudio
+
 
   const handleLoginClick = () => {
     setShowLoginPopup(!showLoginPopup)
@@ -91,10 +89,11 @@ function App() {
     handleSliderChange(index, numValue)
   }
 
-<<<<<<< HEAD
+
   const handleValueBlur = () => {
     setEditingIndex(null)
-=======
+  }
+
   const handleVisualize = async () => {
     if (!vibeText.trim()) {
       alert('Please describe your vision first!');
@@ -134,7 +133,6 @@ function App() {
     } finally {
       setIsLoading(false);
     }
->>>>>>> getAudio
   }
 
   const handleValueKeyPress = (e) => {
@@ -143,13 +141,27 @@ function App() {
     }
   }
 
+  const handleAddVocals = () => {
+    // Add vocals functionality here
+    console.log('Add vocals clicked');
+  }
+
+  const handleHomeClick = () => {
+    setCurrentScreen('home')
+  }
+
+  const handleProfileClick = () => {
+    setCurrentScreen('profile')
+  }
+
   if (currentScreen === 'parameters') {
     return (
       <div className="app parameters-app">
         <header className="header">
           <div className="title">Synthra</div>
           <div className="header-right">
-            <button className="logout-button" onClick={handleLogout}></button>
+            <button className="home-button" onClick={handleHomeClick}>Home</button>
+            <button className="login-button" onClick={handleProfileClick}></button>
           </div>
         </header>
         
@@ -261,23 +273,51 @@ function App() {
     )
   }
 
+  if (currentScreen === 'profile') {
+    return (
+      <div className="app">
+        <header className="header">
+          <div className="title">Synthra</div>
+          <div className="header-right">
+            <button className="home-button" onClick={handleHomeClick}>Home</button>
+            <button className="login-button" onClick={handleProfileClick}></button>
+          </div>
+        </header>
+        
+        <main className="profile-content">
+          <div className="profile-header">
+            <div className="profile-picture"></div>
+            <div className="profile-info">
+              <h2 className="profile-name">John Doe</h2>
+              <p className="profile-bio">Music enthusiast and creative visionary. Love experimenting with different sounds and artistic expressions.</p>
+            </div>
+          </div>
+          
+          <div className="saved-songs-section">
+            <h3 className="saved-songs-title">Saved Songs</h3>
+            <div className="songs-list">
+              <div className="song-item">Ethereal Dreams - Created 2 days ago</div>
+              <div className="song-item">Urban Nights - Created 1 week ago</div>
+              <div className="song-item">Ocean Breeze - Created 2 weeks ago</div>
+              <div className="song-item">Mountain Echo - Created 1 month ago</div>
+            </div>
+          </div>
+        </main>
+      </div>
+    )
+  }
+
   if (currentScreen === 'main') {
     return (
       <div className="app">
         <header className="header">
           <div className="title">Synthra</div>
           <div className="header-right">
-            <button className="logout-button" onClick={handleLogout}></button>
+            <button className="home-button" onClick={handleHomeClick}>Home</button>
+            <button className="login-button" onClick={handleProfileClick}></button>
           </div>
         </header>
-        
-<<<<<<< HEAD
-        <main className="login-screen">
-          <h2 className="message-title">Message to user</h2>
-          <div className="voice-input-area">
-            <button className="input-voice-btn">Input voice</button>
-            <button className="voice-control-btn" onClick={handleMusicPrompt}>Music_Prompt</button>
-=======
+
         <main className="main-screen">
           <div className="vibe-input-container">
             <input 
@@ -288,7 +328,6 @@ function App() {
               onChange={(e) => setVibeText(e.target.value)}
               disabled={isLoading}
             />
-            
             
             <div className="button-row">
               <button className="add-vocals-btn" onClick={handleAddVocals} disabled={isLoading}>Add vocals</button>
@@ -303,7 +342,6 @@ function App() {
                 <p>Generating your music... This may take up to 2 minutes.</p>
               </div>
             )}
->>>>>>> getAudio
           </div>
         </main>
       </div>
