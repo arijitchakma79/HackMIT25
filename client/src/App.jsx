@@ -1,94 +1,51 @@
-
 import { useState } from 'react'
 import './App.css'
-
-const APP_TITLE = 'Synthra';
+import './LoginPopup.css'
 
 function App() {
-  const [currentScreen, setCurrentScreen] = useState('home') // 'home', 'main', 'parameters', 'profile'
-  // Sliders state for parameters screen
-  const [sliderValues, setSliderValues] = useState([95, 95, 95, 95]);
-  // Text input state for main screen
-  const [vibeText, setVibeText] = useState('');
+  const [currentScreen, setCurrentScreen] = useState('home') // 'home', 'main', 'parameters'
+  const [showLoginPopup, setShowLoginPopup] = useState(false)
+  const [activeTab, setActiveTab] = useState('signin') // 'signin' or 'create'
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [loginError, setLoginError] = useState('')
 
-  const handleSliderChange = (index, value) => {
-    const newValues = [...sliderValues];
-    newValues[index] = value;
-    setSliderValues(newValues);
-  }  
+  const handleProfileClick = () => {
+    setShowLoginPopup(!showLoginPopup)
+  }
 
-  const handleLogin = () => {
-    setCurrentScreen('main')
+  const handleLogin = (e) => {
+    e.preventDefault()
+    if (username === 'user' && password === 'pass') {
+      setCurrentScreen('main')
+      setShowLoginPopup(false)
+      setLoginError('')
+      setUsername('')
+      setPassword('')
+    } else {
+      setLoginError('Invalid username or password')
+    }
   }
 
   const handleLogout = () => {
     setCurrentScreen('home')
+    setShowLoginPopup(false)
   }
 
   const handleMusicPrompt = () => {
     setCurrentScreen('parameters')
   }
 
-  const handleProfileClick = () => {
-    setCurrentScreen('profile')
-  }
-
-  const handleHomeClick = () => {
-    setCurrentScreen('home')
-  }
-
-  const handleAddVocals = () => {
-    // Navigate to parameters screen or handle add vocals functionality
-    setCurrentScreen('parameters')
-  }
-
-  const handleVisualize = () => {
-    // Navigate to parameters screen for visualization
-    setCurrentScreen('parameters')
-  }
-
-  if (currentScreen === 'profile') {
-    return (
-      <div className="app">
-        <header className="header">
-          <div className="title">{APP_TITLE}</div>
-          <div className="header-right">
-            <button className="home-button" onClick={handleHomeClick}>Home</button>
-          </div>
-        </header>
-        
-        <main className="profile-content">
-          <div className="profile-header">
-            <div className="profile-picture"></div>
-            <div className="profile-info">
-              <h2 className="profile-name">Profile Name</h2>
-              <p className="profile-bio">Bio words:</p>
-            </div>
-          </div>
-          
-          <div className="saved-songs-section">
-            <h3 className="saved-songs-title">Saved Songs:</h3>
-            <div className="songs-list">
-              <div className="song-item">Song1 - Vibe description</div>
-              <div className="song-item">Song2 - Vibe description</div>
-              <div className="song-item">Song3 - Vibe description</div>
-              <div className="song-item">Song4 - Vibe description</div>
-            </div>
-          </div>
-        </main>
-      </div>
-    )
-  }
-
   if (currentScreen === 'parameters') {
     return (
       <div className="app parameters-app">
         <header className="header">
-          <div className="title">{APP_TITLE}</div>
+          <div className="title">title</div>
           <div className="header-right">
-            <button className="home-button" onClick={handleHomeClick}>Home</button>
+            <button className="logout-button" onClick={handleLogout}></button>
           </div>
         </header>
+        
         <main className="parameters-screen">
           <div className="left-panel">
             <img src="/splash.png" alt="Splash" className="splash-image" />
@@ -96,22 +53,34 @@ function App() {
           <div className="right-panel">
             <h2 className="parameters-title">Parameters</h2>
             <div className="parameters-list">
-              {[0, 1, 2, 3].map((idx) => (
-                <div className="parameter-item" key={idx}>
-                  <span className="param-label">Param</span>
-                  <div className="slider-container">
-                    <input
-                      type="range"
-                      className="param-slider"
-                      min="0"
-                      max="100"
-                      value={sliderValues[idx]}
-                      onChange={e => handleSliderChange(idx, Number(e.target.value))}
-                    />
-                    <span className="param-value">{sliderValues[idx]}%</span>
-                  </div>
+              <div className="parameter-item">
+                <span className="param-label">Param</span>
+                <div className="slider-container">
+                  <input type="range" className="param-slider" min="0" max="100" value="95" readOnly />
+                  <span className="param-value">95%</span>
                 </div>
-              ))}
+              </div>
+              <div className="parameter-item">
+                <span className="param-label">Param</span>
+                <div className="slider-container">
+                  <input type="range" className="param-slider" min="0" max="100" value="95" readOnly />
+                  <span className="param-value">95%</span>
+                </div>
+              </div>
+              <div className="parameter-item">
+                <span className="param-label">Param</span>
+                <div className="slider-container">
+                  <input type="range" className="param-slider" min="0" max="100" value="95" readOnly />
+                  <span className="param-value">95%</span>
+                </div>
+              </div>
+              <div className="parameter-item">
+                <span className="param-label">Param</span>
+                <div className="slider-container">
+                  <input type="range" className="param-slider" min="0" max="100" value="95" readOnly />
+                  <span className="param-value">95%</span>
+                </div>
+              </div>
             </div>
           </div>
         </main>
@@ -123,25 +92,17 @@ function App() {
     return (
       <div className="app">
         <header className="header">
-          <div className="title">{APP_TITLE}</div>
+          <div className="title">title</div>
           <div className="header-right">
-            <button className="home-button" onClick={handleHomeClick}>Home</button>
+            <button className="logout-button" onClick={handleLogout}></button>
           </div>
         </header>
         
-        <main className="main-screen">
-          <div className="vibe-input-container">
-            <input 
-              type="text" 
-              className="vibe-input" 
-              placeholder="Describe your vision..."
-              value={vibeText}
-              onChange={(e) => setVibeText(e.target.value)}
-            />
-            <div className="button-row">
-              <button className="add-vocals-btn" onClick={handleAddVocals}>Add vocals</button>
-              <button className="visualize-btn" onClick={handleVisualize}>Visualize</button>
-            </div>
+        <main className="login-screen">
+          <h2 className="message-title">Message to user</h2>
+          <div className="voice-input-area">
+            <button className="input-voice-btn">Input voice</button>
+            <button className="voice-control-btn" onClick={handleMusicPrompt}>Music_Prompt</button>
           </div>
         </main>
       </div>
@@ -151,10 +112,68 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-  <div className="title">{APP_TITLE}</div>
+        <div className="title">title</div>
         <div className="header-right">
-          <button className="login-text" onClick={handleLogin}>Login</button>
+          <button className="login-text">Login</button>
           <button className="login-button" onClick={handleProfileClick}></button>
+          {showLoginPopup && (
+            <div className="login-popup">
+              <div className="login-popup-header">
+                <h3>Sign In</h3>
+              </div>
+              
+              <div className="tab-container">
+                <div 
+                  className={`tab ${activeTab === 'signin' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('signin')}
+                >
+                  <span className="tab-arrow">▶</span>
+                  <span>Sign In</span>
+                </div>
+                
+                {activeTab === 'signin' && (
+                  <div className="tab-content">
+                    <form onSubmit={handleLogin}>
+                      <div className="form-group">
+                        <label>Username:</label>
+                        <input
+                          type="text"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Password:</label>
+                        <input
+                          type="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                        />
+                      </div>
+                      {loginError && <div className="error-message">{loginError}</div>}
+                      <button type="submit" className="signin-btn">Sign In</button>
+                    </form>
+                  </div>
+                )}
+                
+                <div 
+                  className={`tab ${activeTab === 'create' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('create')}
+                >
+                  <span className="tab-arrow">▶</span>
+                  <span>Create An Account</span>
+                </div>
+                
+                {activeTab === 'create' && (
+                  <div className="tab-content">
+                    <p>Account creation coming soon...</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </header>
       
