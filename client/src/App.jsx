@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import './LoginPopup.css'
+import './SavedSong.css'
 
 // Helper function to format time in MM:SS format
 const formatTime = (timeInSeconds) => {
@@ -35,6 +36,58 @@ function App() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
+  // Restore song data from sessionStorage on component mount
+  useEffect(() => {
+    const savedSongData = sessionStorage.getItem('synthraCurrentSong');
+    if (savedSongData) {
+      try {
+        const songData = JSON.parse(savedSongData);
+        console.log('Restoring song data from session:', songData);
+        
+        // Restore audioUrl if it exists
+        if (songData.audioUrl) {
+          console.log('Restoring audioUrl:', songData.audioUrl);
+          setAudioUrl(songData.audioUrl);
+        }
+        
+        // Restore vibeText if it exists
+        if (songData.vibeText) {
+          console.log('Restoring vibeText:', songData.vibeText);
+          setVibeText(songData.vibeText);
+        }
+        
+        // Restore slider values if they exist
+        if (songData.sliderValues) {
+          console.log('Restoring sliderValues:', songData.sliderValues);
+          setSliderValues(songData.sliderValues);
+        }
+      } catch (error) {
+        console.error('Error parsing saved song data:', error);
+        // Clear corrupted data
+        sessionStorage.removeItem('synthraCurrentSong');
+      }
+    } else {
+      console.log('No saved song data found in session storage');
+    }
+  }, []);
+
+  // Helper function to save song data to sessionStorage
+  const saveSongToSession = (audioUrl, vibeText, sliderValues) => {
+    const songData = {
+      audioUrl,
+      vibeText,
+      sliderValues,
+      timestamp: Date.now()
+    };
+    console.log('Saving song data to session:', songData);
+    sessionStorage.setItem('synthraCurrentSong', JSON.stringify(songData));
+  };
+
+  // Helper function to clear song data from sessionStorage
+  const clearSongFromSession = () => {
+    sessionStorage.removeItem('synthraCurrentSong');
+  };
+
 
   const handleLoginClick = () => {
     setShowLoginPopup(!showLoginPopup)
@@ -43,7 +96,21 @@ function App() {
   const handleLogin = (e) => {
     e.preventDefault()
     if (username === 'user' && password === 'pass') {
-      setCurrentScreen('main')
+      // Check if there's a saved song to determine where to navigate
+      const savedSongData = sessionStorage.getItem('synthraCurrentSong');
+      let hasSavedSong = false;
+      
+      if (savedSongData) {
+        try {
+          const songData = JSON.parse(savedSongData);
+          hasSavedSong = songData.audioUrl;
+        } catch (error) {
+          console.error('Error checking saved song data:', error);
+        }
+      }
+      
+      // Navigate to parameters if there's a saved song, otherwise to main
+      setCurrentScreen(hasSavedSong ? 'parameters' : 'main')
       setShowLoginPopup(false)
       setLoginError('')
       setUsername('')
@@ -55,8 +122,21 @@ function App() {
 
   const handleCreateAccount = (e) => {
     e.preventDefault()
-    // For now, just simulate successful account creation
-    setCurrentScreen('main')
+    // Check if there's a saved song to determine where to navigate
+    const savedSongData = sessionStorage.getItem('synthraCurrentSong');
+    let hasSavedSong = false;
+    
+    if (savedSongData) {
+      try {
+        const songData = JSON.parse(savedSongData);
+        hasSavedSong = songData.audioUrl;
+      } catch (error) {
+        console.error('Error checking saved song data:', error);
+      }
+    }
+    
+    // Navigate to parameters if there's a saved song, otherwise to main
+    setCurrentScreen(hasSavedSong ? 'parameters' : 'main')
     setShowLoginPopup(false)
     setCreateError('')
     setName('')
@@ -68,6 +148,10 @@ function App() {
   const handleLogout = () => {
     setCurrentScreen('home')
     setShowLoginPopup(false)
+    // Clear song data when logging out
+    clearSongFromSession();
+    setAudioUrl(null);
+    setVibeText('');
   }
 
   const handleMusicPrompt = () => {
@@ -78,6 +162,11 @@ function App() {
     const newValues = [...sliderValues]
     newValues[index] = value
     setSliderValues(newValues)
+    
+    // Save updated slider values to sessionStorage if there's an active song
+    if (audioUrl && vibeText) {
+      saveSongToSession(audioUrl, vibeText, newValues);
+    }
   }
 
   const handleValueClick = (index) => {
@@ -123,6 +212,8 @@ function App() {
       if (result.audio_url) {
         setAudioUrl(result.audio_url);
         setCurrentScreen('parameters'); // Navigate to parameters page after generating music
+        // Save song data to sessionStorage for persistence across navigation
+        saveSongToSession(result.audio_url, vibeText, sliderValues);
       } else {
         throw new Error('No audio URL returned from server');
       }
@@ -147,7 +238,29 @@ function App() {
   }
 
   const handleHomeClick = () => {
+    console.log('Navigating to home, current audioUrl:', audioUrl);
     setCurrentScreen('home')
+  }
+
+  const handleParametersClick = () => {
+    console.log('Navigating to parameters, current audioUrl:', audioUrl);
+    setCurrentScreen('parameters')
+  }
+
+  const handleNewSongClick = () => {
+    console.log('Starting new song creation');
+    setCurrentScreen('main')
+  }
+
+  const handleDiscardSongClick = () => {
+    console.log('Discarding current song');
+    // Clear song data from state
+    setAudioUrl(null);
+    setVibeText('');
+    // Clear song data from sessionStorage
+    clearSongFromSession();
+    // Go back to main screen for new song creation
+    setCurrentScreen('main');
   }
 
   const handleProfileClick = () => {
@@ -155,12 +268,15 @@ function App() {
   }
 
   if (currentScreen === 'parameters') {
+    console.log('Rendering parameters screen with audioUrl:', audioUrl, 'vibeText:', vibeText);
     return (
       <div className="app parameters-app">
         <header className="header">
           <div className="title">Synthra</div>
           <div className="header-right">
             <button className="home-button" onClick={handleHomeClick}>Home</button>
+            <button className="new-song-button" onClick={handleNewSongClick}>New Song</button>
+            <button className="discard-song-button" onClick={handleDiscardSongClick}>Discard Song</button>
             <button className="login-button" onClick={handleProfileClick}></button>
           </div>
         </header>
@@ -314,6 +430,9 @@ function App() {
           <div className="title">Synthra</div>
           <div className="header-right">
             <button className="home-button" onClick={handleHomeClick}>Home</button>
+            {audioUrl && (
+              <button className="generated-song-button" onClick={handleParametersClick}>Generated Song</button>
+            )}
             <button className="login-button" onClick={handleProfileClick}></button>
           </div>
         </header>

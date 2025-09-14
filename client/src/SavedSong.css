@@ -1,0 +1,33 @@
+/* Saved Song Notification Styles */
+.saved-song-notification {
+  margin-top: 40px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.saved-song-notification p {
+  color: #333;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.return-to-song-btn {
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.return-to-song-btn:hover {
+  background-color: #ff3333;
+}
