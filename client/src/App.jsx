@@ -33,7 +33,7 @@ function App() {
 
   const [currentScreen, setCurrentScreen] = useState('home') // 'home', 'main', 'parameters', 'profile'
   // Sliders state for parameters screen (now only 3 parameters)
-  const [sliderValues, setSliderValues] = useState([30, 50, 0]); // pixelate, brightness, invert
+  const [sliderValues, setSliderValues] = useState([0, 50, 5]); // pixelate, brightness, invert
   // Text input state for main screen
   const [vibeText, setVibeText] = useState('');
   // Audio playback state
