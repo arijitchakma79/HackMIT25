@@ -740,12 +740,21 @@
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #f8bbd9, #e57373, #ffab91);
+  overflow: hidden;
 }
 
 .splash-image {
   max-width: 80%;
   max-height: 80%;
   object-fit: contain;
+}
+
+/* Hydra Visual Styling */
+.left-panel canvas {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .right-panel {
