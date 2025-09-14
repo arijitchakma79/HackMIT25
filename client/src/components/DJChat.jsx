@@ -28,7 +28,7 @@ const DJChat = ({ onMusicPrompt, disabled = false }) => {
 
   // Welcome message when component mounts
   useEffect(() => {
-    const welcomeMessage = "Hey there! I'm DJ Synthra, your AI music companion. Tell me what kind of vibe you're going for and I'll cook up the perfect track for you!";
+    const welcomeMessage = "Hey there! I'm DJ Synthra, your AI music companion. Tell me what musical style, genre, or vibe you're feeling - like 'upbeat electronic', 'chill lo-fi', or 'heavy rock with guitar solos'. I'll create instrumental tracks that match your energy!";
     
     // Add welcome to conversation
     setConversation([{
@@ -345,7 +345,7 @@ const DJChat = ({ onMusicPrompt, disabled = false }) => {
 
       {/* Manual Text Input */}
       <textarea
-        placeholder="Or type your message here and press Enter..."
+        placeholder="Type your message here and press Enter..."
         onKeyPress={handleManualInput}
         disabled={disabled || isProcessing}
         style={{

@@ -1,6 +1,17 @@
 // Collection of Hydra visual patterns
 // Each pattern is a function that takes userParams and returns a Hydra visualization chain
 
+// Seizure Safety Configuration
+const SEIZURE_SAFETY = {
+  MAX_FLASH_RATE: 3,        // Hz - Maximum flashes per second (safe limit is 3Hz)
+  MIN_OSCILLATOR_FREQ: 0.1, // Minimum oscillator frequency to prevent rapid flashing
+  MAX_OSCILLATOR_FREQ: 8,   // Maximum oscillator frequency (safe limit)
+  MIN_SPEED: 0.01,          // Minimum animation speed
+  MAX_SPEED: 0.3,           // Maximum animation speed to prevent rapid movement
+  MAX_CONTRAST_CHANGE: 0.5, // Maximum contrast change rate
+  MIN_PATTERN_DURATION: 2   // Minimum seconds between pattern changes
+};
+
 // Seeded random number generator for consistent randomness
 class SeededRandom {
   constructor(seed = 12345) {
@@ -33,6 +44,63 @@ class SeededRandom {
     return array[this.int(0, array.length - 1)];
   }
 }
+
+// Seizure safety utility functions
+const seizureSafety = {
+  // Clamp frequency to safe range
+  safeFrequency: (freq) => {
+    return Math.max(SEIZURE_SAFETY.MIN_OSCILLATOR_FREQ, 
+           Math.min(SEIZURE_SAFETY.MAX_OSCILLATOR_FREQ, freq));
+  },
+  
+  // Clamp speed to safe range
+  safeSpeed: (speed) => {
+    return Math.max(SEIZURE_SAFETY.MIN_SPEED,
+           Math.min(SEIZURE_SAFETY.MAX_SPEED, speed));
+  },
+  
+  // Smooth oscillator parameters to prevent sharp changes
+  smoothOscillator: (freq, sync, offset) => {
+    const safeFreq = seizureSafety.safeFrequency(freq);
+    const safeSync = Math.max(-0.1, Math.min(0.1, sync)); // Limit sync range
+    const safeOffset = Math.max(0, Math.min(2, offset)); // Limit offset range
+    
+    return { freq: safeFreq, sync: safeSync, offset: safeOffset };
+  },
+  
+  // Validate pattern for seizure safety
+  validatePattern: (pattern) => {
+    // Check for potentially unsafe patterns
+    const warnings = [];
+    
+    // Check for high frequency oscillators
+    const oscMatches = pattern.match(/osc\(([^,)]+)/g);
+    if (oscMatches) {
+      oscMatches.forEach(match => {
+        const freq = parseFloat(match.match(/osc\(([^,)]+)/)[1]);
+        if (freq > SEIZURE_SAFETY.MAX_OSCILLATOR_FREQ) {
+          warnings.push(`High frequency oscillator detected: ${freq}Hz`);
+        }
+      });
+    }
+    
+    // Check for fast rotation
+    const rotateMatches = pattern.match(/rotate\(([^)]+)\)/g);
+    if (rotateMatches) {
+      rotateMatches.forEach(match => {
+        const speed = parseFloat(match.match(/rotate\(([^)]+)\)/)[1]);
+        if (speed > SEIZURE_SAFETY.MAX_SPEED) {
+          warnings.push(`Fast rotation detected: ${speed}`);
+        }
+      });
+    }
+    
+    return {
+      isSafe: warnings.length === 0,
+      warnings: warnings
+    };
+  }
+};
 
 // Global seeded random instance
 let seededRandom = new SeededRandom();
@@ -217,16 +285,19 @@ export const getRandomColorPalette = () => {
 export const proceduralGenerator = {
   // Random parameter generators influenced by user parameters
   randomOscParams: (userParams = {}) => {
-    const baseFreq = getRandom() * 100 + 1;
+    const baseFreq = getRandom() * 6 + 0.5; // Reduced from 100+1 to 6+0.5 for safety
     // Higher pixelate values favor higher frequencies for more detail
     const pixelateInfluence = (userParams.pixelate || 0) / 100;
-    const freq = baseFreq + (pixelateInfluence * 50); // 1-151 range
+    const freq = baseFreq + (pixelateInfluence * 2); // Reduced influence for safety
     
-    return {
-      freq: freq,
-      sync: (getRandom() - 0.5) * 0.3,  // Increased from 0.1 to 0.3 for more movement
-      offset: getRandom() * 4            // Increased from 2 to 4 for more dynamic offset
-    };
+    // Apply seizure safety limits
+    const safeParams = seizureSafety.smoothOscillator(
+      freq,
+      (getRandom() - 0.5) * 0.1, // Reduced from 0.3 to 0.1 for stability
+      getRandom() * 2             // Reduced from 4 to 2 for safety
+    );
+    
+    return safeParams;
   },
   
   randomNoiseParams: (userParams = {}) => {
@@ -281,9 +352,10 @@ export const proceduralGenerator = {
     } else if (choice < (0.6 - geometricBias/2)) {
       return `noise(${noiseParams.scale.toFixed(2)}, ${noiseParams.offset.toFixed(2)})`;
     } else if (choice < 0.75) {
-      // Enhanced voronoi with more dynamic parameters
+      // Enhanced voronoi with safe speed parameters
       const scale = (getRandom() * 15 + 2).toFixed(2); // Increased from 10+1 to 15+2
-      const speed = (getRandom() * 1.5 + 0.1).toFixed(2); // Increased speed range
+      const rawSpeed = getRandom() * 0.5 + 0.02; // Reduced max speed for safety
+      const speed = seizureSafety.safeSpeed(rawSpeed).toFixed(3);
       const blending = (getRandom() * 3).toFixed(2); // Increased blending range
       return `voronoi(${scale}, ${speed}, ${blending})`;
     } else if (choice < (0.85 + geometricBias)) {
@@ -314,15 +386,20 @@ export const proceduralGenerator = {
       const params = proceduralGenerator.randomNoiseParams(userParams);
       return `.modulate(noise(${params.scale.toFixed(1)}), ${amount})`;
     } else if (choice < 0.45) {
-      return `.modulateScale(osc(${(getRandom() * 30 + 2).toFixed(1)}), ${amount})`; // Increased frequency
+      const safeFreq = seizureSafety.safeFrequency(getRandom() * 6 + 0.5); // Reduced from 30+2
+      return `.modulateScale(osc(${safeFreq.toFixed(1)}), ${amount})`;
     } else if (choice < 0.6) {
-      return `.modulateRotate(osc(${(getRandom() * 20 + 1).toFixed(1)}), ${amount})`; // Increased frequency
+      const safeFreq = seizureSafety.safeFrequency(getRandom() * 4 + 0.5); // Reduced from 20+1
+      return `.modulateRotate(osc(${safeFreq.toFixed(1)}), ${amount})`;
     } else if (choice < 0.75) {
-      return `.modulateScrollX(osc(${(getRandom() * 15 + 1).toFixed(1)}), ${amount})`; // Increased frequency
+      const safeFreq = seizureSafety.safeFrequency(getRandom() * 3 + 0.5); // Reduced from 15+1
+      return `.modulateScrollX(osc(${safeFreq.toFixed(1)}), ${amount})`;
     } else if (choice < 0.9) {
-      return `.modulateScrollY(osc(${(getRandom() * 15 + 1).toFixed(1)}), ${amount})`; // Added Y scrolling
+      const safeFreq = seizureSafety.safeFrequency(getRandom() * 3 + 0.5); // Reduced from 15+1
+      return `.modulateScrollY(osc(${safeFreq.toFixed(1)}), ${amount})`;
     } else {
-      return `.modulateHue(osc(${(getRandom() * 10 + 0.5).toFixed(1)}), ${amount})`; // Added hue modulation
+      const safeFreq = seizureSafety.safeFrequency(getRandom() * 2 + 0.5); // Reduced from 10+0.5
+      return `.modulateHue(osc(${safeFreq.toFixed(1)}), ${amount})`;
     }
   },
   
@@ -339,7 +416,8 @@ export const proceduralGenerator = {
       const amount = (getRandom() * 2 + 0.3).toFixed(2);
       return `.scale(${amount})`;
     } else if (choice < (0.45 + brightnessInfluence * 0.1)) {
-      const speed = (getRandom() * 0.8 + 0.02).toFixed(4); // Increased rotation speed significantly
+      const rawSpeed = getRandom() * 0.2 + 0.02; // Reduced max rotation speed for safety
+      const speed = seizureSafety.safeSpeed(rawSpeed).toFixed(4);
       return `.rotate(${speed})`;
     } else if (choice < 0.6) {
       const amount = Math.floor(getRandom() * 30) + 3; // 3-32
@@ -514,6 +592,13 @@ export const generateProceduralPattern = (complexity = 'medium', userParams = { 
   
   const patternCode = generateAdvancedPattern(randomColors, complexity, userParams);
   
+  // Validate pattern for seizure safety
+  const validation = seizureSafety.validatePattern(patternCode);
+  if (!validation.isSafe) {
+    console.warn('Pattern safety warnings:', validation.warnings);
+    // In a production app, you might want to regenerate the pattern or apply additional safety measures
+  }
+  
   return {
     name: `Procedural ${complexity.charAt(0).toUpperCase() + complexity.slice(1)}`,
     pattern: (userParams, colors) => {
@@ -521,14 +606,16 @@ export const generateProceduralPattern = (complexity = 'medium', userParams = { 
         return eval(patternCode.replace(/colors\./g, 'colors.'));
       } catch (error) {
         console.error('Error in procedural pattern:', error);
-        // Fallback to simple oscillator
-        return osc(10, 0.1, 0.8).color(colors.r, colors.g, colors.b);
+        // Fallback to simple, safe oscillator
+        const safeFreq = seizureSafety.safeFrequency(2);
+        return osc(safeFreq, 0.05, 0.8).color(colors.r, colors.g, colors.b);
       }
     },
     colors: randomColors,
     isProcedurallyGenerated: true,
     generatedCode: patternCode,
-    influencedByUserParams: true
+    influencedByUserParams: true,
+    safetyValidation: validation
   };
 };
 
