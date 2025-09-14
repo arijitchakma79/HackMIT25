@@ -620,7 +620,8 @@
 .param-label {
   font-size: 18px;
   color: #333;
-  min-width: 80px;
+  min-width: 120px;
+  width: 120px;
 }
 
 .slider-container {
@@ -787,7 +788,8 @@
 .param-label {
   font-size: 18px;
   color: #333;
-  min-width: 80px;
+  min-width: 120px;
+  width: 120px;
 }
 
 .slider-container {
