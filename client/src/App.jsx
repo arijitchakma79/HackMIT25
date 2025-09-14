@@ -8,6 +8,8 @@ function App() {
   const [currentScreen, setCurrentScreen] = useState('home') // 'home', 'main', 'parameters', 'profile'
   // Sliders state for parameters screen
   const [sliderValues, setSliderValues] = useState([95, 95, 95, 95]);
+  // Text input state for main screen
+  const [vibeText, setVibeText] = useState('');
 
   const handleSliderChange = (index, value) => {
     const newValues = [...sliderValues];
@@ -33,6 +35,16 @@ function App() {
 
   const handleHomeClick = () => {
     setCurrentScreen('home')
+  }
+
+  const handleAddVocals = () => {
+    // Navigate to parameters screen or handle add vocals functionality
+    setCurrentScreen('parameters')
+  }
+
+  const handleVisualize = () => {
+    // Handle visualize functionality - for now just log the vibe text
+    console.log('Visualizing vibe:', vibeText)
   }
 
   if (currentScreen === 'profile') {
@@ -117,11 +129,19 @@ function App() {
           </div>
         </header>
         
-        <main className="login-screen">
-          <h2 className="message-title">Message to user</h2>
-          <div className="voice-input-area">
-            <button className="input-voice-btn">Input voice</button>
-            <button className="voice-control-btn" onClick={handleMusicPrompt}>Music_Prompt</button>
+        <main className="main-screen">
+          <div className="vibe-input-container">
+            <input 
+              type="text" 
+              className="vibe-input" 
+              placeholder="Describe your vibe..."
+              value={vibeText}
+              onChange={(e) => setVibeText(e.target.value)}
+            />
+            <div className="button-row">
+              <button className="add-vocals-btn" onClick={handleAddVocals}>Add vocals</button>
+              <button className="visualize-btn" onClick={handleVisualize}>Visualize</button>
+            </div>
           </div>
         </main>
       </div>
