@@ -3,6 +3,7 @@ import './App.css'
 import './LoginPopup.css'
 import './SavedSong.css'
 import HydraVisual from './HydraVisual.jsx'
+import VoiceInput from './components/VoiceInput'
 
 // Helper function to format time in MM:SS format
 const formatTime = (timeInSeconds) => {
@@ -268,6 +269,10 @@ function App() {
     setCurrentScreen('profile')
   }
 
+  const handleVoiceTranscript = (transcript) => {
+    setVibeText(transcript)
+  }
+
   if (currentScreen === 'parameters') {
     console.log('Rendering parameters screen with audioUrl:', audioUrl, 'vibeText:', vibeText);
     return (
@@ -440,10 +445,16 @@ function App() {
 
         <main className="main-screen">
           <div className="vibe-input-container">
+            <VoiceInput 
+              onTranscriptChange={handleVoiceTranscript}
+              disabled={isLoading}
+              placeholder="Click to start voice input"
+            />
+            
             <input 
               type="text" 
               className="vibe-input" 
-              placeholder="Describe your vision..."
+              placeholder="Describe your vision... or use voice input above"
               value={vibeText}
               onChange={(e) => setVibeText(e.target.value)}
               disabled={isLoading}
