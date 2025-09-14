@@ -2,7 +2,16 @@ import { useState } from 'react'
 import './App.css'
 import './LoginPopup.css'
 
+// Helper function to format time in MM:SS format
+const formatTime = (timeInSeconds) => {
+  if (isNaN(timeInSeconds) || timeInSeconds < 0 || !isFinite(timeInSeconds)) return '0:00';
+  const minutes = Math.floor(timeInSeconds / 60);
+  const seconds = Math.floor(timeInSeconds % 60);
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+};
+
 function App() {
+<<<<<<< HEAD
   const [currentScreen, setCurrentScreen] = useState('home') // 'home', 'main', 'parameters'
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [activeTab, setActiveTab] = useState('signin') // 'signin' or 'create'
@@ -15,6 +24,19 @@ function App() {
   const [sliderValues, setSliderValues] = useState([95, 95, 95, 95])
   const [editingIndex, setEditingIndex] = useState(null)
   const parameterNames = ['Kalied', 'Pixelate', 'Modulate', 'param 4']
+=======
+  const [currentScreen, setCurrentScreen] = useState('home') // 'home', 'main', 'parameters', 'profile'
+  // Sliders state for parameters screen
+  const [sliderValues, setSliderValues] = useState([95, 95, 95, 95]);
+  // Text input state for main screen
+  const [vibeText, setVibeText] = useState('');
+  // Audio playback state
+  const [audioUrl, setAudioUrl] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+>>>>>>> getAudio
 
   const handleLoginClick = () => {
     setShowLoginPopup(!showLoginPopup)
@@ -69,8 +91,50 @@ function App() {
     handleSliderChange(index, numValue)
   }
 
+<<<<<<< HEAD
   const handleValueBlur = () => {
     setEditingIndex(null)
+=======
+  const handleVisualize = async () => {
+    if (!vibeText.trim()) {
+      alert('Please describe your vision first!');
+      return;
+    }
+
+    setIsLoading(true);
+    setAudioUrl(null);
+    
+    try {
+      const response = await fetch('http://localhost:5001/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: vibeText
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      
+      if (result.audio_url) {
+        setAudioUrl(result.audio_url);
+        setCurrentScreen('parameters'); // Navigate to parameters page after generating music
+      } else {
+        throw new Error('No audio URL returned from server');
+      }
+    } catch (error) {
+      console.error('Error generating music:', error);
+      console.error('Error details:', error.message);
+      alert(`Failed to generate music: ${error.message}. Please try again.`);
+    } finally {
+      setIsLoading(false);
+    }
+>>>>>>> getAudio
   }
 
   const handleValueKeyPress = (e) => {
@@ -124,6 +188,73 @@ function App() {
                 </div>
               ))}
             </div>
+            
+            {audioUrl && (
+              <div className="audio-player-params">
+                <div className="player-header">
+                  <h3>Your Generated Music</h3>
+                  <p>Based on: "{vibeText}"</p>
+                </div>
+                <audio 
+                  src={audioUrl}
+                  controls
+                  className="audio-element-params"
+                  onLoadedMetadata={(e) => {
+                    const audioDuration = e.target.duration;
+                    console.log('onLoadedMetadata - duration:', audioDuration);
+                    console.log('onLoadedMetadata - isFinite:', isFinite(audioDuration));
+                    console.log('onLoadedMetadata - readyState:', e.target.readyState);
+                    if (isFinite(audioDuration) && audioDuration > 0) {
+                      setDuration(audioDuration);
+                      console.log('Duration set to:', audioDuration);
+                    } else if (audioDuration === Infinity) {
+                      console.log('Streaming audio detected - duration will be unknown until buffered');
+                      setDuration(-1); // Use -1 to indicate streaming/unknown duration
+                    }
+                  }}
+                  onCanPlayThrough={(e) => {
+                    const audioDuration = e.target.duration;
+                    console.log('onCanPlayThrough - duration:', audioDuration);
+                    console.log('onCanPlayThrough - isFinite:', isFinite(audioDuration));
+                    if (isFinite(audioDuration) && audioDuration > 0) {
+                      setDuration(audioDuration);
+                      console.log('Duration set via onCanPlayThrough:', audioDuration);
+                    }
+                  }}
+                  onTimeUpdate={(e) => {
+                    setCurrentTime(e.target.currentTime);
+                    // Fallback: try to get duration if not already set
+                    if (duration === 0 && isFinite(e.target.duration) && e.target.duration > 0) {
+                      console.log('Duration found in onTimeUpdate:', e.target.duration);
+                      setDuration(e.target.duration);
+                    }
+                  }}
+                  onLoadedData={(e) => {
+                    const audioDuration = e.target.duration;
+                    console.log('onLoadedData - duration:', audioDuration);
+                    if (isFinite(audioDuration) && audioDuration > 0) {
+                      setDuration(audioDuration);
+                      console.log('Duration set via onLoadedData:', audioDuration);
+                    }
+                  }}
+                  onDurationChange={(e) => {
+                    const audioDuration = e.target.duration;
+                    console.log('onDurationChange - duration:', audioDuration);
+                    if (isFinite(audioDuration) && audioDuration > 0) {
+                      setDuration(audioDuration);
+                      console.log('Duration set via onDurationChange:', audioDuration);
+                    }
+                  }}
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
+                  onEnded={() => {
+                    setIsPlaying(false);
+                  }}
+                >
+                  Your browser does not support audio playback.
+                </audio>
+              </div>
+            )}
           </div>
         </main>
       </div>
@@ -140,11 +271,39 @@ function App() {
           </div>
         </header>
         
+<<<<<<< HEAD
         <main className="login-screen">
           <h2 className="message-title">Message to user</h2>
           <div className="voice-input-area">
             <button className="input-voice-btn">Input voice</button>
             <button className="voice-control-btn" onClick={handleMusicPrompt}>Music_Prompt</button>
+=======
+        <main className="main-screen">
+          <div className="vibe-input-container">
+            <input 
+              type="text" 
+              className="vibe-input" 
+              placeholder="Describe your vision..."
+              value={vibeText}
+              onChange={(e) => setVibeText(e.target.value)}
+              disabled={isLoading}
+            />
+            
+            
+            <div className="button-row">
+              <button className="add-vocals-btn" onClick={handleAddVocals} disabled={isLoading}>Add vocals</button>
+              <button className="visualize-btn" onClick={handleVisualize} disabled={isLoading}>
+                {isLoading ? 'Generating...' : 'Visualize'}
+              </button>
+            </div>
+            
+            {isLoading && (
+              <div className="loading-state">
+                <div className="loading-spinner"></div>
+                <p>Generating your music... This may take up to 2 minutes.</p>
+              </div>
+            )}
+>>>>>>> getAudio
           </div>
         </main>
       </div>
