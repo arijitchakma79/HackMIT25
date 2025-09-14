@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 const HydraVisual = ({ 
   width = 600, 
   height = 600,
-  userParams = { blur: 50, pixelate: 30, color: 180, kaleid: 40 }
+  userParams = { blur: 50, pixelate: 30, color: 180, invert: 0 }
 }) => {
   const canvasRef = useRef(null);
   const hydraRef = useRef(null);
@@ -55,7 +55,7 @@ const HydraVisual = ({
               const pixelateValue = userParams.pixelate; // 0 to 100
               const blurAmount = userParams.blur / 100; // 0 to 1.0
               const colorHue = userParams.color; // 0 to 360
-              const kaleidAmount = Math.floor(userParams.kaleid / 10) + 2; // 2 to 12
+              const invertValue = userParams.invert; // 0 to 100
               
               let visualization = osc(100,-0.0018,0.17).diff(osc(20,0.00008).rotate(Math.PI/0.00003))
                 .modulateScale(noise(1.5,0.18).modulateScale(osc(13).rotate(()=>Math.sin(time/22))),3)
@@ -69,6 +69,12 @@ const HydraVisual = ({
               if (pixelateValue > 0) {
                 const pixelateAmount = Math.max(1, Math.floor((101 - pixelateValue) / 2)); // 1 to 50
                 visualization = visualization.pixelate(pixelateAmount, pixelateAmount);
+              }
+              
+              // Apply color inversion if value > 0
+              if (invertValue > 0) {
+                const invertAmount = invertValue / 100; // 0 to 1
+                visualization = visualization.invert(invertAmount);
               }
               
               visualization.out();
@@ -159,7 +165,7 @@ const HydraVisual = ({
         const pixelateValue = userParams.pixelate; // 0 to 100
         const blurAmount = userParams.blur / 100; // 0 to 1.0
         const colorHue = userParams.color; // 0 to 360
-        const kaleidAmount = Math.floor(userParams.kaleid / 10) + 2; // 2 to 12
+        const invertValue = userParams.invert; // 0 to 100
         
         let visualization = osc(100,-0.0018,0.17).diff(osc(20,0.00008).rotate(Math.PI/0.00003))
           .modulateScale(noise(1.5,0.18).modulateScale(osc(13).rotate(()=>Math.sin(time/22))),3)
@@ -173,6 +179,12 @@ const HydraVisual = ({
         if (pixelateValue > 0) {
           const pixelateAmount = Math.max(1, Math.floor((101 - pixelateValue) / 2)); // 1 to 50
           visualization = visualization.pixelate(pixelateAmount, pixelateAmount);
+        }
+        
+        // Apply color inversion if value > 0
+        if (invertValue > 0) {
+          const invertAmount = invertValue / 100; // 0 to 1
+          visualization = visualization.invert(invertAmount);
         }
         
         visualization.out();

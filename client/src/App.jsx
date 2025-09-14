@@ -24,11 +24,16 @@ function App() {
   const [email, setEmail] = useState('')
   const [createError, setCreateError] = useState('')
   const [editingIndex, setEditingIndex] = useState(null)
-  const parameterNames = ['Kalied', 'Pixelate', 'Modulate', 'param 4']
+  const parameterNames = [
+    'Dreamscape (blur)', 
+    'Pixelverse (pixelate)', 
+    'Spectrum (color)', 
+    'Inversion (invert)'
+  ]
 
   const [currentScreen, setCurrentScreen] = useState('home') // 'home', 'main', 'parameters', 'profile'
   // Sliders state for parameters screen
-  const [sliderValues, setSliderValues] = useState([95, 95, 95, 95]);
+  const [sliderValues, setSliderValues] = useState([50, 30, 180, 0]); // Set invert default to 0
   // Text input state for main screen
   const [vibeText, setVibeText] = useState('');
   // Audio playback state
@@ -296,7 +301,7 @@ function App() {
                 blur: sliderValues[0],
                 pixelate: sliderValues[1],
                 color: sliderValues[2],
-                kaleid: sliderValues[3]
+                invert: sliderValues[3]
               }}
             />
           </div>
