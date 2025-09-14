@@ -25,15 +25,14 @@ function App() {
   const [createError, setCreateError] = useState('')
   const [editingIndex, setEditingIndex] = useState(null)
   const parameterNames = [
-    'Dreamscape (blur)', 
     'Pixelverse (pixelate)', 
     'Luminance (brightness)', 
     'Inversion (invert)'
   ]
 
   const [currentScreen, setCurrentScreen] = useState('home') // 'home', 'main', 'parameters', 'profile'
-  // Sliders state for parameters screen
-  const [sliderValues, setSliderValues] = useState([50, 30, 50, 0]); // Set brightness default to 50 (neutral)
+  // Sliders state for parameters screen (now only 3 parameters)
+  const [sliderValues, setSliderValues] = useState([30, 50, 0]); // pixelate, brightness, invert
   // Text input state for main screen
   const [vibeText, setVibeText] = useState('');
   // Audio playback state
@@ -63,10 +62,16 @@ function App() {
           setVibeText(songData.vibeText);
         }
         
-        // Restore slider values if they exist
+        // Restore slider values if they exist and match current parameter count
         if (songData.sliderValues) {
           console.log('Restoring sliderValues:', songData.sliderValues);
-          setSliderValues(songData.sliderValues);
+          // Only restore if the array length matches current parameter count
+          if (songData.sliderValues.length === parameterNames.length) {
+            setSliderValues(songData.sliderValues);
+          } else {
+            console.log('Slider values length mismatch, using defaults');
+            // Keep the default values we set in useState
+          }
         }
       } catch (error) {
         console.error('Error parsing saved song data:', error);
@@ -298,10 +303,9 @@ function App() {
               width={600} 
               height={600} 
               userParams={{
-                blur: sliderValues[0],
-                pixelate: sliderValues[1],
-                brightness: sliderValues[2],
-                invert: sliderValues[3]
+                pixelate: sliderValues[0],
+                brightness: sliderValues[1],
+                invert: sliderValues[2]
               }}
             />
           </div>

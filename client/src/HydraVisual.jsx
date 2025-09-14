@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 const HydraVisual = ({ 
   width = 600, 
   height = 600,
-  userParams = { blur: 50, pixelate: 30, brightness: 50, invert: 0 }
+  userParams = { pixelate: 30, brightness: 50, invert: 0 }
 }) => {
   const canvasRef = useRef(null);
   const hydraRef = useRef(null);
@@ -53,7 +53,6 @@ const HydraVisual = ({
               
               // Execute the visualization code with dynamic parameters
               const pixelateValue = userParams.pixelate; // 0 to 100
-              const blurAmount = userParams.blur / 100; // 0 to 1.0
               const brightnessValue = userParams.brightness; // 0 to 100
               const invertValue = userParams.invert; // 0 to 100
               
@@ -167,7 +166,6 @@ const HydraVisual = ({
       try {
         // Execute the visualization code with dynamic parameters
         const pixelateValue = userParams.pixelate; // 0 to 100
-        const blurAmount = userParams.blur / 100; // 0 to 1.0
         const brightnessValue = userParams.brightness; // 0 to 100
         const invertValue = userParams.invert; // 0 to 100
         
