@@ -69,6 +69,13 @@
   text-align: center;
 }
 
+.slogan {
+  font-family: "Host Grotesk", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: italic;
+}
+
 .home-button {
   background: none;
   border: none;
@@ -289,6 +296,7 @@
   outline: none;
   border-radius: 3px;
   -webkit-appearance: none;
+  appearance: none;
 }
 
 .param-slider::-webkit-slider-thumb {
@@ -316,10 +324,11 @@
   min-width: 40px;
 }
 
-.slogan {
+.parameters-title{
   font-family: "Host Grotesk", sans-serif;
   font-optical-sizing: auto;
   font-weight: 300;
   font-style: italic;
 }
+
 
