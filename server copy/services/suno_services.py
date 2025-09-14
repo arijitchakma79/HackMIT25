@@ -40,7 +40,7 @@ def get_clips(clip_ids):
     return r.json()
 
 def poll_until_complete(clip_id, interval=5, max_attempts=30):
-    for _ in range(max_attempts):
+    for attempt in range(max_attempts):
         clips = get_clips([clip_id])
         if not clips:
             raise Exception("Clip not found")
