@@ -12,6 +12,9 @@ function App() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [createError, setCreateError] = useState('')
+  const [sliderValues, setSliderValues] = useState([95, 95, 95, 95])
+  const [editingIndex, setEditingIndex] = useState(null)
+  const parameterNames = ['Kalied', 'Pixelate', 'Modulate', 'param 4']
 
   const handleLoginClick = () => {
     setShowLoginPopup(!showLoginPopup)
@@ -51,11 +54,36 @@ function App() {
     setCurrentScreen('parameters')
   }
 
+  const handleSliderChange = (index, value) => {
+    const newValues = [...sliderValues]
+    newValues[index] = value
+    setSliderValues(newValues)
+  }
+
+  const handleValueClick = (index) => {
+    setEditingIndex(index)
+  }
+
+  const handleValueChange = (index, value) => {
+    const numValue = Math.max(0, Math.min(100, parseInt(value) || 0))
+    handleSliderChange(index, numValue)
+  }
+
+  const handleValueBlur = () => {
+    setEditingIndex(null)
+  }
+
+  const handleValueKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      setEditingIndex(null)
+    }
+  }
+
   if (currentScreen === 'parameters') {
     return (
       <div className="app parameters-app">
         <header className="header">
-          <div className="title">title</div>
+          <div className="title">Synthra</div>
           <div className="header-right">
             <button className="logout-button" onClick={handleLogout}></button>
           </div>
@@ -68,34 +96,33 @@ function App() {
           <div className="right-panel">
             <h2 className="parameters-title">Parameters</h2>
             <div className="parameters-list">
-              <div className="parameter-item">
-                <span className="param-label">Param</span>
-                <div className="slider-container">
-                  <input type="range" className="param-slider" min="0" max="100" value="95" readOnly />
-                  <span className="param-value">95%</span>
+              {sliderValues.map((value, index) => (
+                <div className="parameter-item" key={index}>
+                  <span className="param-label">{parameterNames[index]}</span>
+                  <div className="slider-container">
+                    <input 
+                      type="range" 
+                      className="param-slider" 
+                      min="0" 
+                      max="100" 
+                      value={value} 
+                      onChange={(e) => handleSliderChange(index, e.target.value)}
+                    />
+                    {editingIndex === index ? (
+                      <input 
+                        type="number" 
+                        className="param-value-edit" 
+                        value={value} 
+                        onChange={(e) => handleValueChange(index, e.target.value)} 
+                        onBlur={handleValueBlur} 
+                        onKeyPress={handleValueKeyPress}
+                      />
+                    ) : (
+                      <span className="param-value" onClick={() => handleValueClick(index)}>{value}%</span>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div className="parameter-item">
-                <span className="param-label">Param</span>
-                <div className="slider-container">
-                  <input type="range" className="param-slider" min="0" max="100" value="95" readOnly />
-                  <span className="param-value">95%</span>
-                </div>
-              </div>
-              <div className="parameter-item">
-                <span className="param-label">Param</span>
-                <div className="slider-container">
-                  <input type="range" className="param-slider" min="0" max="100" value="95" readOnly />
-                  <span className="param-value">95%</span>
-                </div>
-              </div>
-              <div className="parameter-item">
-                <span className="param-label">Param</span>
-                <div className="slider-container">
-                  <input type="range" className="param-slider" min="0" max="100" value="95" readOnly />
-                  <span className="param-value">95%</span>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </main>
@@ -107,7 +134,7 @@ function App() {
     return (
       <div className="app">
         <header className="header">
-          <div className="title">title</div>
+          <div className="title">Synthra</div>
           <div className="header-right">
             <button className="logout-button" onClick={handleLogout}></button>
           </div>
@@ -127,7 +154,7 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <div className="title">title</div>
+        <div className="title">Synthra</div>
         <div className="header-right">
           <button className="login-text" onClick={handleLoginClick}>Login</button>
           <button className="login-button"></button>
