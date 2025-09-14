@@ -10,7 +10,7 @@ function App() {
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState('')
 
-  const handleProfileClick = () => {
+  const handleLoginClick = () => {
     setShowLoginPopup(!showLoginPopup)
   }
 
@@ -114,8 +114,8 @@ function App() {
       <header className="header">
         <div className="title">title</div>
         <div className="header-right">
-          <button className="login-text">Login</button>
-          <button className="login-button" onClick={handleProfileClick}></button>
+          <button className="login-text" onClick={handleLoginClick}>Login</button>
+          <button className="login-button"></button>
           {showLoginPopup && (
             <div className="login-popup">
               <div className="login-popup-header">
