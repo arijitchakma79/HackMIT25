@@ -383,7 +383,16 @@ function App() {
             className="title"
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 400 }}
+            style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
           >
+            <img 
+              src="/logo.png" 
+              alt="Synthra Logo" 
+              style={{ 
+                height: '32px', 
+                width: 'auto'
+              }} 
+            />
             Synthra
           </motion.div>
           <div className="header-right">
@@ -616,7 +625,16 @@ function App() {
             className="title"
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 400 }}
+            style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
           >
+            <img 
+              src="/logo.png" 
+              alt="Synthra Logo" 
+              style={{ 
+                height: '32px', 
+                width: 'auto'
+              }} 
+            />
             Synthra
           </motion.div>
           <div className="header-right">
@@ -735,7 +753,16 @@ function App() {
             className="title"
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 400 }}
+            style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
           >
+            <img 
+              src="/logo.png" 
+              alt="Synthra Logo" 
+              style={{ 
+                height: '32px', 
+                width: 'auto'
+              }} 
+            />
             Synthra
           </motion.div>
           <div className="header-right">
@@ -838,7 +865,16 @@ function App() {
           className="title"
           whileHover={{ scale: 1.05 }}
           transition={{ type: "spring", stiffness: 400 }}
+          style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
         >
+          <img 
+            src="/logo.png" 
+            alt="Synthra Logo" 
+            style={{ 
+              height: '32px', 
+              width: 'auto'
+            }} 
+          />
           Synthra
         </motion.div>
         <div className="header-right">
